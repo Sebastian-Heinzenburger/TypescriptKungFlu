@@ -29,6 +29,10 @@ class Virus {
         };
   }
 
+  doIKnowThis(){
+
+  }
+
   //return mutated version of the Virus
   get() {
       let _v = new Virus();

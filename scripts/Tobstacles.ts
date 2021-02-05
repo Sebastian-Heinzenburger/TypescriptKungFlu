@@ -1,5 +1,6 @@
 ///<reference path="Tsketch.ts"/>
 let obstacles: Obstacle[]
+let baseNodes: PathFinderNode[]
 
 class Obstacle {
   x: number;
