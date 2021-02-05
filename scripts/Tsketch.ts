@@ -32,7 +32,7 @@ function preload() {
 }
 
 function setup() {
-    nodeSize = windowWidth/33;
+    nodeSize = windowWidth/39;
 
     for (let x = 0; x <= windowWidth/nodeSize; x++) {
       globalNodes.push([]);
@@ -43,7 +43,7 @@ function setup() {
 
     setupBackground();
     //create 15 Persons and store them in a people array
-    for (let i = 0; i < 24; i++) { people.push(new Person()); }
+    for (let i = 0; i < 30; i++) { people.push(new Person()); }
     people[0].infectWith(new Virus());
     createCanvas(windowWidth, windowHeight);
 
@@ -90,9 +90,12 @@ function keyPressed() {
       return (keyCode===123 || keyCode===116)
   }
 
+  return true;
+
 }
 
 function draw() {
+
     //update...
     for (let i = 0; i < Config.speed; i++) {
           currentAnalData = {
@@ -133,8 +136,7 @@ function draw() {
         console.log(JSON.stringify(analData));
       stopped=true;
     }
-    console.log("new frame")
-    console.clear();
+
 }
 
 function renderSimulation() {
@@ -151,7 +153,7 @@ function renderSimulation() {
     fill(255);
     noStroke();
     text(`${deltaTime.toFixed()} ms per frame`, 5, 15);
-    text(`${Math.floor(mouseX/nodeSize)}, ${Math.floor(mouseY/nodeSize)}`, mouseX, mouseY);
+    text(`${Math.floor(mouseX/nodeSize)}, ${Math.floor(mouseY/nodeSize)} ${globalNodes[Math.floor(mouseX/nodeSize)][Math.floor(mouseY/nodeSize)].isGood}`, mouseX, mouseY);
     text(`${people.length} people\n${Math.floor(windowWidth/nodeSize)}x${Math.floor(windowHeight/nodeSize)} path nodes`, 5, 35);
     strokeWeight(1);
     stroke(255);

@@ -17,6 +17,7 @@ class Person {
   virus: Virus;
   pathFinder: AStar;
   showInfo: number;
+  timeTable: PathFinderNode[];
 
   constructor() {
     this.position = createVector(random(windowWidth), random(windowHeight));
@@ -146,7 +147,6 @@ class Person {
         && (this.position.y / nodeSize <= this.pathFinder.nextN.y + nodeSize * 0.5))
         //Math.floor(this.position.y / nodeSize) == this.pathFinder.startNode.y && this.pathFinder.startNode.x + nodeSize * 0.2 <= this.position.x / nodeSize <= this.pathFinder.startNode.x - nodeSize * 0.2
     ) {
-      console.log("computing")
 
       this.pathFinder.nodes = [];
       globalNodes.forEach(n => {

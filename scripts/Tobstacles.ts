@@ -18,6 +18,10 @@ class Obstacle {
     this.i = i;
     this.o = o;
 
+
+    if (this.w % 1 !== 0 || this.h % 1 !== 0) return;
+
+
     //try to find each corresponding node inside the Obstacle
     for (let w = 0; w < this.w; w++) {
       for (let h = 0; h < this.h; h++) {
@@ -54,11 +58,11 @@ function setupBackground() {
   obstacles.push(new Obstacle(1, 20, 13, 1, color(0, 0, 0), color(0, 0, 0)))
   obstacles.push(new Obstacle(17, 20, 15, 1, color(0, 0, 0), color(0, 0, 0)))
 
-  obstacles.push(new Obstacle(1, 10, 9, 2, color(0, 0, 0), color(0, 0, 0)))
-  obstacles.push(new Obstacle(22, 10, 9, 2, color(0, 0, 0), color(0, 0, 0)))
+  obstacles.push(new Obstacle(1, 11, 9, 1, color(0, 0, 0), color(0, 0, 0)))
+  obstacles.push(new Obstacle(22, 11, 9, 1, color(0, 0, 0), color(0, 0, 0)))
 
-  obstacles.push(new Obstacle(9, 1, 1, 8, color(0, 0, 0), color(0, 0, 0)))
-  obstacles.push(new Obstacle(22, 1, 1, 8, color(0, 0, 0), color(0, 0, 0)))
+  obstacles.push(new Obstacle(9, 1, 1, 9, color(0, 0, 0), color(0, 0, 0)))
+  obstacles.push(new Obstacle(22, 1, 1, 9, color(0, 0, 0), color(0, 0, 0)))
   obstacles.push(new Obstacle(9, 12, 1, 7, color(0, 0, 0), color(0, 0, 0)))
   obstacles.push(new Obstacle(22, 12, 1, 7, color(0, 0, 0), color(0, 0, 0)))
 
@@ -111,8 +115,6 @@ function setupBackground() {
   obstacles.push(new Obstacle(25, 14, 1, 1, color(110, 80, 10), color(0, 0, 0)))
   obstacles.push(new Obstacle(25, 15, 1, 1, color(110, 80, 10), color(0, 0, 0)))
   obstacles.push(new Obstacle(25, 16, 1, 1, color(110, 80, 10), color(0, 0, 0)))
-  obstacles.push(new Obstacle(26, 16, 1, 1, color(110, 80, 10), color(0, 0, 0)))
-  obstacles.push(new Obstacle(27, 16, 1, 1, color(110, 80, 10), color(0, 0, 0)))
   obstacles.push(new Obstacle(28, 16, 1, 1, color(110, 80, 10), color(0, 0, 0)))
   obstacles.push(new Obstacle(28, 15, 1, 1, color(110, 80, 10), color(0, 0, 0)))
   obstacles.push(new Obstacle(28, 14, 1, 1, color(110, 80, 10), color(0, 0, 0)))
