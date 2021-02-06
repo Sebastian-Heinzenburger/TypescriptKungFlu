@@ -1,6 +1,7 @@
 ///<reference path="Tsketch.ts"/>
 let obstacles: Obstacle[]
-let baseNodes: PathFinderNode[]
+let baseNodeIndexes: number[][] = []
+
 
 class Obstacle {
   x: number;
@@ -26,7 +27,7 @@ class Obstacle {
     //try to find each corresponding node inside the Obstacle
     for (let w = 0; w < this.w; w++) {
       for (let h = 0; h < this.h; h++) {
-        try { globalNodes[this.x+w][this.y+h].isGood = false; } catch {}
+        baseNodeIndexes.push([x+w, y+h]);
       }
     }
 

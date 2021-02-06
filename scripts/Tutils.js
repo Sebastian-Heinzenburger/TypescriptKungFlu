@@ -1,92 +1,78 @@
 ///<reference path="../../../.config/JetBrains/WebStorm2020.3/javascript/extLibs/global-types/node_modules/@types/p5/global.d.ts"/>
 ///<reference path="Tsketch.ts"/>
-enum HEALTH {
-    HEALTHY,
-    INFECTED,
-    INFECTIOUS,
-    IMMUNE,
-    DEAD
-}
-
-let SLIDERS = {
+var HEALTH;
+(function (HEALTH) {
+    HEALTH[HEALTH["HEALTHY"] = 0] = "HEALTHY";
+    HEALTH[HEALTH["INFECTED"] = 1] = "INFECTED";
+    HEALTH[HEALTH["INFECTIOUS"] = 2] = "INFECTIOUS";
+    HEALTH[HEALTH["IMMUNE"] = 3] = "IMMUNE";
+    HEALTH[HEALTH["DEAD"] = 4] = "DEAD";
+})(HEALTH || (HEALTH = {}));
+var SLIDERS = {
     // @ts-ignore
     speedSlider: p5.Element,
     // @ts-ignore
     fadeoutSlider: p5.Element,
-}
-
+};
 function hideSliders() {
     select("#sliderD").hide();
 }
-
 function showSliders() {
     select("#sliderD").show();
 }
-
 function updateSliderValues() {
     Config.speed = SLIDERS.speedSlider.value();
     Config.fadeTime = SLIDERS.fadeoutSlider.value();
 }
-
 Object.freeze(HEALTH);
-
-enum VIEWS {
-    SIMULATION,
-    BARS,
-    CIRCLE,
-    FANCY
-}
-
- const Config = {
-    speed:  1,
+var VIEWS;
+(function (VIEWS) {
+    VIEWS[VIEWS["SIMULATION"] = 0] = "SIMULATION";
+    VIEWS[VIEWS["BARS"] = 1] = "BARS";
+    VIEWS[VIEWS["CIRCLE"] = 2] = "CIRCLE";
+    VIEWS[VIEWS["FANCY"] = 3] = "FANCY";
+})(VIEWS || (VIEWS = {}));
+var Config = {
+    speed: 1,
     fadeTime: 400,
-
- }
-
- function neq(o, t) {
-   if (!o || !t) return true;
+};
+function neq(o, t) {
+    if (!o || !t)
+        return true;
     if (o.x != t.x) {
         return true;
     }
     return o.y != t.y;
-
- }
-
- function listCopy(_from: PathFinderNode[][]): PathFinderNode[][] {
-     let _new = [];
-
-     for (let x = 0; x < _from.length-1; x++) {
-         _new.push([]);
-         for (let y = 0; y < _from[x].length-1; y++) {
+}
+function listCopy(_from) {
+    var _new = [];
+    for (var x = 0; x < _from.length - 1; x++) {
+        _new.push([]);
+        for (var y = 0; y < _from[x].length - 1; y++) {
             _new[x][y] = _from[x][y].copy();
-         }
-     }
-     return _new;
- }
-
-
- function getR(){
-    let _r = 0;
-    people.forEach(person => {
+        }
+    }
+    return _new;
+}
+function getR() {
+    var _r = 0;
+    people.forEach(function (person) {
         _r += person.infectedPeople;
     });
-    return (_r/(people.length - currentAnalData.HEALTHY - currentAnalData.INFECTED)).toFixed(2)
- }
-
-
-function drawCurve(_healthtype) {
-  beginShape();
-  let o, n;
-  for (let i = 1; i < windowWidth && i < analData.length; i++) {
-    n = windowHeight-analData[Math.floor(i*(analData.length/windowWidth))][_healthtype]*(windowHeight/people.length);
-    if (o && o!= n)
-      vertex(i, o)
-      vertex(i, n);
-    o = n;
-  }
-  endShape();
+    return (_r / (people.length - currentAnalData.HEALTHY - currentAnalData.INFECTED)).toFixed(2);
 }
-
+function drawCurve(_healthtype) {
+    beginShape();
+    var o, n;
+    for (var i = 1; i < windowWidth && i < analData.length; i++) {
+        n = windowHeight - analData[Math.floor(i * (analData.length / windowWidth))][_healthtype] * (windowHeight / people.length);
+        if (o && o != n)
+            vertex(i, o);
+        vertex(i, n);
+        o = n;
+    }
+    endShape();
+}
 // function drawCurve(_healthType) {
 //   var scaleY = (windowHeight/people.length);
 //   var n = (analData.length/100)+1;
@@ -103,10 +89,6 @@ function drawCurve(_healthtype) {
 //     // curve(x1*scaleX, windowHeight-y1, x2*scaleX,windowHeight-y2, x3*scaleX,windowHeight-y3, x4 *scaleX,windowHeight-y4);
 //   }
 // }
-
-
-
-
 // function drawCurve(_healthType) {
 //
 //   var scaleY = (windowHeight/people.length);
@@ -122,8 +104,6 @@ function drawCurve(_healthtype) {
 //       line(x1 * scaleX, windowHeight - y1, x2 * scaleX, windowHeight - y2);
 //   }
 // }
-
-
 //
 // function drawCurve(_healthType) {
 //

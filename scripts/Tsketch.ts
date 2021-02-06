@@ -8,9 +8,10 @@
 ///<reference path="TastarLib.ts"/>
 ///<reference path="TPerson.ts"/>
 ///<reference path="../../../.config/JetBrains/WebStorm2020.3/javascript/extLibs/global-types/node_modules/@types/p5/src/image/p5.Image.d.ts"/>
+let canvas;
 let nodeSize;
 let globalNodes = [];
-let people = [];
+let people: Person[] = [];
 let analData = [];
 let currentAnalData = {
       HEALTHY: 0,
@@ -34,6 +35,11 @@ function preload() {
 function setup() {
     nodeSize = windowWidth/39;
 
+    SLIDERS.speedSlider = select("#speedSlider");
+    SLIDERS.fadeoutSlider = select("#fadeoutSlider");
+    hideSliders();
+
+
     for (let x = 0; x <= windowWidth/nodeSize; x++) {
       globalNodes.push([]);
       for (let y = 0; y < windowHeight/nodeSize; y++) {
@@ -43,15 +49,16 @@ function setup() {
 
     setupBackground();
     //create 15 Persons and store them in a people array
-    for (let i = 0; i < 30; i++) { people.push(new Person()); }
+    for (let i = 0; i < 24; i++) { people.push(new Person()); }
     people[0].infectWith(new Virus());
-    createCanvas(windowWidth, windowHeight);
-
+    canvas = createCanvas(windowWidth, windowHeight);
+    frameRate(60);
 
 }
 
 function mousePressed(event) {
- //cycle through every person...
+    if (canvas.style("display") == "none") return true;
+    //cycle through every person...
     people.forEach(person => {
         //...and check if its under the mousePointer
         if (dist(person.position.x, person.position.y, event.x, event.y) < 30) {
@@ -60,7 +67,7 @@ function mousePressed(event) {
             person.showInfo = Config.fadeTime;
         }
     });
-    return false;
+    return true;
 }
 
 function keyPressed() {
@@ -69,6 +76,14 @@ function keyPressed() {
     //just because I got used to pressing a
     case 'a':
     case 'A':
+        if (canvas.style("display") == "none") {
+            hideSliders();
+            canvas.show();
+        } else {
+            canvas.hide();
+            showSliders()
+        }
+        break;
     //////////////////////////////////////
     case 'B':
     case 'b':
@@ -96,17 +111,27 @@ function keyPressed() {
 
 function draw() {
 
+    updateSliderValues();
+
     //update...
     for (let i = 0; i < Config.speed; i++) {
-          currentAnalData = {
-                HEALTHY: 0,
-                INFECTED: 0,
-                INFECTIOUS: 0,
-                IMMUNE: 0,
-                DEAD: 0
-          };
+        currentAnalData = {
+            HEALTHY: 0,
+            INFECTED: 0,
+            INFECTIOUS: 0,
+            IMMUNE: 0,
+            DEAD: 0
+        };
+        globalNodes.forEach(_gN => {
+            _gN.isGood = true;
+        });
+        baseNodeIndexes.forEach(_bNI => {
+            try{ globalNodes[_bNI[0]][_bNI[1]].isGood = false; } catch {}
+        });
+        console.log("update with " + windowWidth)
         people.forEach(person => {
-          person.update();
+            person.update();
+            // globalNodes[Math.floor(person.position.x/nodeSize)][Math.floor(person.position.y/nodeSize)].isGood = false;
         });
     }
 
@@ -134,7 +159,8 @@ function draw() {
     } else {
       if (!stopped)
         console.log(JSON.stringify(analData));
-      stopped=true;
+        analData.push(currentAnalData)
+        stopped=true;
     }
 
 }
@@ -153,8 +179,10 @@ function renderSimulation() {
     fill(255);
     noStroke();
     text(`${deltaTime.toFixed()} ms per frame`, 5, 15);
-    text(`${Math.floor(mouseX/nodeSize)}, ${Math.floor(mouseY/nodeSize)} ${globalNodes[Math.floor(mouseX/nodeSize)][Math.floor(mouseY/nodeSize)].isGood}`, mouseX, mouseY);
-    text(`${people.length} people\n${Math.floor(windowWidth/nodeSize)}x${Math.floor(windowHeight/nodeSize)} path nodes`, 5, 35);
+    text(`${people.length} people
+${Math.floor(windowWidth/nodeSize)}x${Math.floor(windowHeight/nodeSize)} path nodes
+current R: ${getR()}`,5, 35);
+    try { text(`${Math.floor(mouseX/nodeSize)}, ${Math.floor(mouseY/nodeSize)} ${globalNodes[Math.floor(mouseX/nodeSize)][Math.floor(mouseY/nodeSize)].isGood}`, mouseX, mouseY); } catch {}
     strokeWeight(1);
     stroke(255);
     fill(255);

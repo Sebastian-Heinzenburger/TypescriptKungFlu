@@ -7,7 +7,7 @@ class Person {
 
 
   // @ts-ignore
-  private position: p5.Vector;
+  position: p5.Vector;
   // @ts-ignore
   private velocity: p5.Vector;
   private state: number;
@@ -18,6 +18,7 @@ class Person {
   pathFinder: AStar;
   showInfo: number;
   timeTable: PathFinderNode[];
+  infectedPeople: number = 0;
 
   constructor() {
     this.position = createVector(random(windowWidth), random(windowHeight));
@@ -28,12 +29,6 @@ class Person {
     this.infectRadius = this.size + 2;
     this.virus = null;
     this.pathFinder = new AStar();
-
-
-    this.pathFinder.nodes = [];
-    globalNodes.forEach(n => {
-      this.pathFinder.nodes.push(n);
-    });
     this.pathFinder.startNode = globalNodes[Math.floor(this.position.x/nodeSize)][Math.floor(this.position.y/nodeSize)+1]
 
   }
@@ -110,12 +105,14 @@ class Person {
       //cycle through every person...
       people.forEach(person => {
         //dont spontaneously self-infect
-        if (person === this) return;
-        //if in reach
-        if (dist(person.position.x, person.position.y, this.position.x, this.position.y) < this.infectRadius) {
-          //and not dead
-          if (person.state === HEALTH.HEALTHY) {
-            person.infectWith(this.virus.get());
+        if (person !== this) {
+          //if in reach
+          if (dist(person.position.x, person.position.y, this.position.x, this.position.y) < this.infectRadius) {
+            //and not dead
+            if (person.state === HEALTH.HEALTHY || person.state === HEALTH.IMMUNE) {
+              person.infectWith(this.virus.get());
+              this.infectedPeople++;
+            }
           }
         }
       });
@@ -123,6 +120,7 @@ class Person {
   }
 
   handleMovement() {
+
     //dont move if ya dead
     if (this.state === HEALTH.DEAD) return;
 
@@ -132,11 +130,11 @@ class Person {
     }
 
     //refresh the startNode
-    this.pathFinder.startNode = this.pathFinder.nodes[Math.floor(this.position.x / nodeSize)][Math.floor(this.position.y / nodeSize)];
+    this.pathFinder.startNode = globalNodes[Math.floor(this.position.x / nodeSize)][Math.floor(this.position.y / nodeSize)];
 
 
     //
-    // this.pathFinder.endNode = this.pathFinder.nodes[Math.floor(mouseX / nodeSize)][Math.floor(mouseY / nodeSize)];
+    // this.pathFinder.endNode = globalNodes[Math.floor(mouseX / nodeSize)][Math.floor(mouseY / nodeSize)];
     //
 
     //falls man den pfad neuberechnen sollte
@@ -148,14 +146,10 @@ class Person {
         //Math.floor(this.position.y / nodeSize) == this.pathFinder.startNode.y && this.pathFinder.startNode.x + nodeSize * 0.2 <= this.position.x / nodeSize <= this.pathFinder.startNode.x - nodeSize * 0.2
     ) {
 
-      this.pathFinder.nodes = [];
-      globalNodes.forEach(n => {
-        this.pathFinder.nodes.push(n);
-      });
-
       //berechne den Pfad
-      if (this.pathFinder.getPath(this.pathFinder.nodes)) {
+      if (this.pathFinder.getPath(globalNodes)) {
 
+        console.log(this.pathFinder.endNode)
         //reconstructing the path:
         //the current node we are looking at
         let n = this.pathFinder.endNode;
@@ -181,7 +175,8 @@ class Person {
           ((this.pathFinder.nextN.x + 0.5) * nodeSize) - this.position.x,
           ((this.pathFinder.nextN.y + 0.5) * nodeSize) - this.position.y,
       );
-      this.velocity.mult(0.2);
+      this.velocity.limit(this.velocity.mag())
+      this.velocity.setMag((this.velocity.mag()/250)*(deltaTime/Config.speed))
       this.position.add(this.velocity);
     } else {
       this.pathFinder.randomEndNode(this);
@@ -190,12 +185,12 @@ class Person {
   }
 
   infectWith(virus) {
-    //if healthy
-    if (this.state !== HEALTH.HEALTHY) return;
-    //infect self with given Virus
-    this.localTimer = 0;
-    this.virus = virus;
-    this.state = HEALTH.INFECTED;
+    if (this.state===HEALTH.HEALTHY || !this.virus.isSimilarEnough(virus)) {
+      //infect self with given Virus
+      this.localTimer = 0;
+      this.virus = virus;
+      this.state = HEALTH.INFECTED;
+    }
   }
 
   getInfo() {
@@ -210,6 +205,7 @@ ______VIRUS_______
 - Rekonvaleszenzzeit:${this.virus.tRekonvaleszenz.toFixed(1)}
 - Symptome:
 ${this.virus.symptoms.toString()}
+- R: ${this.infectedPeople}
 `
 
   }

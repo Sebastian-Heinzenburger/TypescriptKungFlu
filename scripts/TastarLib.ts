@@ -6,11 +6,11 @@ class AStar {
   endNode;
   startNode;
   nodes: PathFinderNode[];
-  lEndNode: any;
-  nextN: any;
-  openlist: any[];
-  closedList: any[];
-  currentNode: any;
+  lEndNode: PathFinderNode;
+  nextN: PathFinderNode;
+  openlist: PathFinderNode[];
+  closedList: PathFinderNode[];
+  currentNode: PathFinderNode;
 
   constructor() {
     //nodes that are under consideration
@@ -43,9 +43,9 @@ class AStar {
   }
 
   randomEndNode(person) {
-    person.pathFinder.endNode = person.pathFinder.nodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
+    person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
     while (!person.pathFinder.endNode.isGood) {
-      person.pathFinder.endNode = person.pathFinder.nodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
+      person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
     }
   }
 
@@ -58,9 +58,9 @@ class AStar {
 
       //top row
       if (n.y > 0) {
-        // if (n.x > 0) { neighbours.push(ns[n.x-1][n.y-1]); }
+         if (n.x > 0 && ns[n.x][n.y-1].isGood && ns[n.x-1][n.y].isGood) { neighbours.push(ns[n.x-1][n.y-1]); }
         neighbours.push(ns[n.x][n.y-1]);
-        // if (n.x < ns.length-1) { neighbours.push(ns[n.x+1][n.y-1]); }
+        if (n.x < ns.length-1 && ns[n.x][n.y-1].isGood && ns[n.x+1][n.y].isGood) { neighbours.push(ns[n.x+1][n.y-1]); }
       }
 
       //middle row
@@ -69,9 +69,9 @@ class AStar {
 
       //lower row
       if (n.y < ns[0].length-1) {
-        // if (n.x > 0) { neighbours.push(ns[n.x-1][n.y+1]); }
+        if (n.x > 0 && ns[n.x][n.y+1].isGood && ns[n.x-1][n.y].isGood) { neighbours.push(ns[n.x-1][n.y+1]); }
         neighbours.push(ns[n.x][n.y+1]);
-        // if (n.x < ns.length-1) { neighbours.push(ns[n.x+1][n.y+1]); }
+        if (n.x < ns.length-1 && ns[n.x+1][n.y].isGood && ns[n.x][n.y+1].isGood) { neighbours.push(ns[n.x+1][n.y+1]); }
       }
     } catch {
       throw(TypeError);
@@ -104,6 +104,7 @@ class AStar {
 
   //return true if path is possible
   getPath(_ns) {
+
 
     //stop if there is no endNode or startNode
     if (!this.startNode || !this.endNode) return false;
@@ -145,10 +146,11 @@ class AStar {
 
 class PathFinderNode {
 
-  x: any;
-  y: any;
+  x: number;
+  y: number;
+  g: number;
   isGood: boolean;
-  daddy: any;
+  daddy: PathFinderNode;
 
   constructor(_x, _y) {
     this.x = _x;
@@ -157,5 +159,13 @@ class PathFinderNode {
     this.g = Number.MAX_SAFE_INTEGER*0.99;
     this.isGood = true;
     this.daddy = null;
+  }
+
+  copy() : PathFinderNode{
+    let _n = new PathFinderNode(this.x, this.y);
+    _n.g = this.g;
+    _n.isGood = this.isGood;
+    _n.daddy = this.daddy;
+    return _n
   }
 }
