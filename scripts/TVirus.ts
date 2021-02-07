@@ -11,7 +11,7 @@ class Virus {
         this.rLetalitaet = 0.5;
         this.tRekonvaleszenz = 700;
         this.tIncubation = 500;
-        this.tLatenz = 300;
+        this.tLatenz = 10;
         this.symptoms = {
             SNEEZING: 0.001,
             COUGHING: 0.002,

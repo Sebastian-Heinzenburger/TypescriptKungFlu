@@ -2,6 +2,7 @@
 ///<reference path="../Tsketch.ts"/>
 function renderCircle() {
     background(60);
+    stroke(0);
     var size = (windowWidth < windowHeight ? windowWidth : windowHeight) - 100;
     //keep track of current degree for drawing the portion of the circle
     var currentDeg = {

@@ -117,7 +117,6 @@ var Person = /** @class */ (function () {
         ) {
             //berechne den Pfad
             if (this.pathFinder.getPath(globalNodes)) {
-                console.log(this.pathFinder.endNode);
                 //reconstructing the path:
                 //the current node we are looking at
                 var n = this.pathFinder.endNode;
@@ -158,7 +157,7 @@ var Person = /** @class */ (function () {
     Person.prototype.getInfo = function () {
         if (!this.virus)
             return "\nim healthy\n";
-        return "\n______VIRUS_______\n- Latenzzeit: " + this.virus.tLatenz.toFixed(1) + "\n- Incubationszeit:" + this.virus.tIncubation.toFixed(1) + "\n- Rekonvaleszenzzeit:" + this.virus.tRekonvaleszenz.toFixed(1) + "\n- Symptome:\n" + this.virus.symptoms.toString() + "\n- R: " + this.infectedPeople + "\n";
+        return "\n______VIRUS_______\n- Latenzzeit: " + (this.virus.tLatenz / 60).toFixed(1) + "h\n- Incubationszeit:" + (this.virus.tIncubation / 60).toFixed(1) + "h\n- Rekonvaleszenzzeit:" + (this.virus.tRekonvaleszenz / 60).toFixed(1) + "h\n- Symptome:\n" + this.virus.symptoms.toString() + "\n- R: " + this.infectedPeople + "\n";
     };
     Person.prototype.drawInfo = function (c) {
         var _m = createVector(mouseX - this.position.x, mouseY - this.position.y);

@@ -22,7 +22,10 @@ var currentAnalData = {
 };
 var view = VIEWS.SIMULATION;
 var stopped = false;
+var paused = false;
 var newImg, bg;
+var WIDTH;
+var HEIGHT;
 // @ts-ignore
 var personImage;
 function preload() {
@@ -31,8 +34,6 @@ function preload() {
 }
 function setup() {
     nodeSize = windowWidth / 39;
-    SLIDERS.speedSlider = select("#speedSlider");
-    SLIDERS.fadeoutSlider = select("#fadeoutSlider");
     hideSliders();
     for (var x = 0; x <= windowWidth / nodeSize; x++) {
         globalNodes.push([]);
@@ -77,7 +78,6 @@ function keyPressed() {
                 showSliders();
             }
             break;
-        //////////////////////////////////////
         case 'B':
         case 'b':
             view = view === VIEWS.BARS ? VIEWS.SIMULATION : VIEWS.BARS;
@@ -90,16 +90,27 @@ function keyPressed() {
         case 'c':
             view = view === VIEWS.CIRCLE ? VIEWS.SIMULATION : VIEWS.CIRCLE;
             break;
+        case 'P':
+        case 'p':
+            paused = !paused;
+            break;
         case 'F':
         case 'f':
-            view = view === VIEWS.FANCY ? VIEWS.SIMULATION : VIEWS.FANCY;
+            if (view === VIEWS.FANCY2) {
+                view = VIEWS.FANCY;
+            }
+            else {
+                view = view === VIEWS.SIMULATION ? VIEWS.FANCY2 : VIEWS.SIMULATION;
+            }
             break;
         default:
-            return (keyCode === 123 || keyCode === 116);
+            return true;
     }
     return true;
 }
 function draw() {
+    if (paused)
+        return;
     updateSliderValues();
     //update...
     for (var i = 0; i < Config.speed; i++) {
@@ -119,16 +130,28 @@ function draw() {
             }
             catch (_a) { }
         });
-        console.log("update with " + windowWidth);
         people.forEach(function (person) {
             person.update();
             // globalNodes[Math.floor(person.position.x/nodeSize)][Math.floor(person.position.y/nodeSize)].isGood = false;
         });
+        if (currentAnalData.INFECTED + currentAnalData.INFECTIOUS == 0 && frameCount > 1) {
+            if (frameCount % 2 === 0)
+                analData.push(currentAnalData);
+        }
+        else {
+            if (!stopped)
+                console.log(JSON.stringify(analData));
+            analData.push(currentAnalData);
+            stopped = true;
+        }
     }
     //draw
     switch (view) {
         case VIEWS.SIMULATION:
             renderSimulation();
+            break;
+        case VIEWS.FANCY2:
+            renderFancy2();
             break;
         case VIEWS.BARS:
             if (stopped && newImg !== undefined) {
@@ -143,16 +166,6 @@ function draw() {
         case VIEWS.FANCY:
             renderFancy();
             break;
-    }
-    if (currentAnalData.IMMUNE + currentAnalData.DEAD + currentAnalData.HEALTHY < people.length) {
-        if (frameCount % 2 === 0)
-            analData.push(currentAnalData);
-    }
-    else {
-        if (!stopped)
-            console.log(JSON.stringify(analData));
-        analData.push(currentAnalData);
-        stopped = true;
     }
 }
 function renderSimulation() {

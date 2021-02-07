@@ -18,6 +18,7 @@ class Person {
   pathFinder: AStar;
   showInfo: number;
   timeTable: PathFinderNode[];
+  timeTableIndex: number;
   infectedPeople: number = 0;
 
   constructor() {
@@ -149,7 +150,6 @@ class Person {
       //berechne den Pfad
       if (this.pathFinder.getPath(globalNodes)) {
 
-        console.log(this.pathFinder.endNode)
         //reconstructing the path:
         //the current node we are looking at
         let n = this.pathFinder.endNode;
@@ -200,9 +200,9 @@ im healthy
 
     return `
 ______VIRUS_______
-- Latenzzeit: ${this.virus.tLatenz.toFixed(1)}
-- Incubationszeit:${this.virus.tIncubation.toFixed(1)}
-- Rekonvaleszenzzeit:${this.virus.tRekonvaleszenz.toFixed(1)}
+- Latenzzeit: ${(this.virus.tLatenz/60).toFixed(1)}h
+- Incubationszeit:${(this.virus.tIncubation/60).toFixed(1)}h
+- Rekonvaleszenzzeit:${(this.virus.tRekonvaleszenz/60).toFixed(1)}h
 - Symptome:
 ${this.virus.symptoms.toString()}
 - R: ${this.infectedPeople}

@@ -59,14 +59,39 @@
 <body style="margin: 0; background: #262626">
 <div class="canvasDiv" id="canvasD"></div>
 <div class="slidecontainer" id="sliderD" style="font-family:Arial,monospace; font-size: 16px; color: #FFFFFF">
+    <p>
+        People:&nbsp;
+        <input type="range" min="1" max="40" value="24" class="slider" id="people">&nbsp;&nbsp;
+    </p>
     <h2>Virus: </h2>
-    <p>TODO</p>
+    <p>
+        Override Virus Properties globally:
+        <input type="checkbox" id="override">
+    </p>
+    <p>
+        Latenzzeit:&nbsp;
+        <input type="range" min="1" max="1440" value="1" class="slider" id="latenz">&nbsp;&nbsp;
+    </p>
+    <p>
+        Inkubationszeit:&nbsp;
+        <input type="range" min="1" max="15" value="1" class="slider" id="incubation">&nbsp;&nbsp;
+    </p>
+    <p>
+        Rekonvaleszenz:&nbsp;
+        <input type="range" min="1" max="15" value="1" class="slider" id="recon">&nbsp;&nbsp;
+    </p>
+    <p>
+        Letalitätsrate:&nbsp;
+        <input type="range" min="0" max="100" value="5" class="slider" id="letalitaet">&nbsp;&nbsp;
+    </p>
 
     <h2>Config: </h2>
-    <p> Speed (Computations per frame):&nbsp;
+    <p>
+        Speed (Computations per frame):&nbsp;
         <input type="range" min="1" max="15" value="1" class="slider" id="speedSlider">&nbsp;&nbsp;
     </p>
-    <p> Info fadeout speed:&nbsp;
+    <p>
+        Info fadeout speed:&nbsp;
         <input type="range" min="20" max="800" value="200" class="slider" id="fadeoutSlider">&nbsp;&nbsp;
     </p>
 
