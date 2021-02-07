@@ -19,17 +19,21 @@ class Person {
   showInfo: number;
   timeTable: PathFinderNode[];
   timeTableIndex: number;
+  myPersonalIndex: number;
   infectedPeople: number = 0;
 
   constructor() {
-    this.position = createVector(random(windowWidth), random(windowHeight));
+    this.position = createVector(15.5*nodeSize, 21.5*nodeSize);
     this.velocity = createVector(random(-1, 1), random(-1, 1)).normalize();
     this.state = HEALTH.HEALTHY;
-    this.size = 30;
+    this.size = nodeSize/2;
     this.localTimer = 0;
-    this.infectRadius = this.size + 2;
+    this.infectRadius = this.size * 1.5;
     this.virus = null;
     this.pathFinder = new AStar();
+    this.myPersonalIndex = people.length
+    this.timeTableIndex = 0;
+    console.log(this.myPersonalIndex)
     this.pathFinder.startNode = globalNodes[Math.floor(this.position.x/nodeSize)][Math.floor(this.position.y/nodeSize)+1]
 
   }
@@ -72,7 +76,7 @@ class Person {
       //für jedes Symptom
       for (let symptom in this.virus.symptoms) {
         if (random(1) < this.virus.symptoms[symptom]) {
-          this.infectRadius = 60;
+          this.infectRadius = this.size*3;
         }
       }
     }
@@ -127,7 +131,7 @@ class Person {
 
     //if its the first time, pick a random endnote TODO:
     if (!this.pathFinder.endNode) {
-      this.pathFinder.randomEndNode(this);
+      this.pathFinder.endNode = this.getNextNode();
     }
 
     //refresh the startNode
@@ -176,16 +180,29 @@ class Person {
           ((this.pathFinder.nextN.y + 0.5) * nodeSize) - this.position.y,
       );
       this.velocity.limit(this.velocity.mag())
-      this.velocity.setMag((this.velocity.mag()/250)*(deltaTime/Config.speed))
-      this.position.add(this.velocity);
+      this.velocity.setMag((this.velocity.mag()/100)*(deltaTime/Config.speed))
+      if(this.position.x + this.velocity.x > 0 && this.position.x + this.velocity.x < windowWidth &&
+          this.position.y + this.velocity.y > 0 && this.position.y + this.velocity.y < windowHeight)
+          this.position.add(this.velocity);
     } else {
-      this.pathFinder.randomEndNode(this);
+      this.pathFinder.endNode = this.getNextNode();
     }
 
   }
 
+  getNextNode() {
+    let _t = [Lessonduration, shortBreakDuration, Lessonduration, shortBreakDuration, Lessonduration, BreakDuration, shortBreakDuration, Lessonduration, shortBreakDuration, Lessonduration, Lessonduration, 9999]
+    let t = 0;
+    let i = 0;
+    for (i = 0; t < frameCount; i++) {
+      t += _t[i%_t.length]
+    }
+    this.timeTableIndex = i%_t.length
+    return timetables[this.myPersonalIndex%4][this.timeTableIndex][floor(this.myPersonalIndex/4)]
+  }
+
   infectWith(virus) {
-    if (this.state===HEALTH.HEALTHY || !this.virus.isSimilarEnough(virus)) {
+    if (this.state===HEALTH.HEALTHY || !this.virus.isNotSimilarEnough(virus)) {
       //infect self with given Virus
       this.localTimer = 0;
       this.virus = virus;
@@ -245,13 +262,10 @@ ${this.virus.symptoms.toString()}
 
     //draw ellipse
     fill(c);
-    ellipse(this.position.x, this.position.y, personImage.height * 1.5, personImage.height * 1.5)
+    ellipse(this.position.x, this.position.y, this.size*2, this.size*2)
 
     this.drawInfo(c)
 
-    //draw image
-    noFill();
-    image(personImage, this.position.x - personImage.width * 0.5, this.position.y - personImage.height * 0.5);
 
     //if not dead
     // if (!(this.state == HEALTH.DEAD || this.state == HEALTH.IMMUNE)) {
@@ -261,6 +275,10 @@ ${this.virus.symptoms.toString()}
       fill(c);
       ellipse(this.position.x, this.position.y, this.infectRadius, this.infectRadius);
     }
+
+    //draw image
+    noFill();
+    image(personImage, this.position.x - this.size * 0.5, this.position.y - this.size * 0.5, this.size, this.size);
 
     //debug text
     // simulationGraphics.fill(255);

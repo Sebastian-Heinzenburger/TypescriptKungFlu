@@ -34,6 +34,9 @@ function showSliders() {
 function updateSliderValues() {
     Config.speed = select("#speedSlider").value();
     Config.fadeTime = select("#fadeoutSlider").value();
+    shortBreakDuration = select("#sbreakd").value();
+    BreakDuration = select("#breakd").value();
+    Lessonduration = select("#lessond").value();
     while (people.length > select("#people").value()) {
         people.pop();
     }
@@ -86,7 +89,7 @@ function getR() {
     people.forEach(function (person) {
         _r += person.infectedPeople;
     });
-    return (_r / (people.length - currentAnalData.HEALTHY - currentAnalData.INFECTED)).toFixed(2);
+    return (_r / (people.length - currentAnalData.HEALTHY - currentAnalData.INFECTED));
 }
 // function drawCurve(_healthtype) {
 //   beginShape();

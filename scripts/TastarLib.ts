@@ -41,13 +41,13 @@ class AStar {
   f(n) {
     return n.g + this.h(n);
   }
-
-  randomEndNode(person) {
-    person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
-    while (!person.pathFinder.endNode.isGood) {
-      person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
-    }
-  }
+  //
+  // randomEndNode(person) {
+  //   person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
+  //   while (!person.pathFinder.endNode.isGood) {
+  //     person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
+  //   }
+  // }
 
   expandNode(n, ns) {
 

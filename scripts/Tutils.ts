@@ -40,6 +40,10 @@ function updateSliderValues() {
     Config.speed = <number>select("#speedSlider").value();
     Config.fadeTime = <number>select("#fadeoutSlider").value();
 
+    shortBreakDuration = <number>select("#sbreakd").value();
+    BreakDuration = <number>select("#breakd").value();
+    Lessonduration = <number>select("#lessond").value();
+
     while (people.length > select("#people").value()) {
         people.pop()
     }
@@ -98,12 +102,12 @@ enum VIEWS {
  }
 
 
- function getR(){
+ function getR(): number {
     let _r = 0;
     people.forEach(person => {
         _r += person.infectedPeople;
     });
-    return (_r/(people.length - currentAnalData.HEALTHY - currentAnalData.INFECTED)).toFixed(2)
+    return (_r/(people.length - currentAnalData.HEALTHY - currentAnalData.INFECTED))
  }
 
 

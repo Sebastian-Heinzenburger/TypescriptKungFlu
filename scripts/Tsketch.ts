@@ -18,14 +18,13 @@ let currentAnalData = {
       INFECTED: 0,
       INFECTIOUS: 0,
       IMMUNE: 0,
-      DEAD: 0
+      DEAD: 0,
+      R: 0,
 };
 let view = VIEWS.SIMULATION;
 let stopped: boolean = false;
 let paused: boolean = false;
 let newImg, bg;
-let WIDTH: number;
-let HEIGHT: number;
 // @ts-ignore
 let personImage: p5.Image;
 
@@ -36,6 +35,21 @@ function preload() {
 }
 
 function setup() {
+
+    alert(`
+Nachricht für Joni
+------------------
+Das ganze ist (immernoch nicht) fertig
+z.B. fehlen noch Schutzmaßnahmen
+Hier ist ne Liste mit den Keybindings:
+B: Blockgraph
+F: Fancygraphen
+C: Kreisdiagram
+A: Einstellungen
+P: Pausieren
+
+Außerdem kann man für Informationen auf die Leute klicken :)
+    `)
 
     nodeSize = windowWidth/39;
 
@@ -50,6 +64,7 @@ function setup() {
     }
 
     setupBackground();
+    initTimetables();
     //create 15 Persons and store them in a people array
     for (let i = 0; i < 24; i++) { people.push(new Person()); }
     people[0].infectWith(new Virus());
@@ -130,7 +145,9 @@ function draw() {
             INFECTED: 0,
             INFECTIOUS: 0,
             IMMUNE: 0,
-            DEAD: 0
+            DEAD: 0,
+            // @ts-ignore
+            R: parseFloat(getR())
         };
         globalNodes.forEach(_gN => {
             _gN.isGood = true;
@@ -142,11 +159,11 @@ function draw() {
             person.update();
             // globalNodes[Math.floor(person.position.x/nodeSize)][Math.floor(person.position.y/nodeSize)].isGood = false;
         });
-        if (currentAnalData.INFECTED + currentAnalData.INFECTIOUS == 0 && frameCount > 1) {
+        if (currentAnalData.INFECTIOUS + currentAnalData.INFECTED >= 1) {
             if (frameCount % 2 === 0) analData.push(currentAnalData);
         } else {
             if (!stopped)
-                console.log(JSON.stringify(analData));
+                console.warn(JSON.stringify(analData));
             analData.push(currentAnalData)
             stopped=true;
         }
@@ -175,7 +192,6 @@ function draw() {
         break;
     }
 
-
 }
 
 function renderSimulation() {
@@ -194,7 +210,7 @@ function renderSimulation() {
     text(`${deltaTime.toFixed()} ms per frame`, 5, 15);
     text(`${people.length} people
 ${Math.floor(windowWidth/nodeSize)}x${Math.floor(windowHeight/nodeSize)} path nodes
-current R: ${getR()}`,5, 35);
+current R: ${getR().toFixed(2)}`,5, 35);
     try { text(`${Math.floor(mouseX/nodeSize)}, ${Math.floor(mouseY/nodeSize)} ${globalNodes[Math.floor(mouseX/nodeSize)][Math.floor(mouseY/nodeSize)].isGood}`, mouseX, mouseY); } catch {}
     strokeWeight(1);
     stroke(255);

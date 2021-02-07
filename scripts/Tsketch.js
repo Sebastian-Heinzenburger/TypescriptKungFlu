@@ -18,14 +18,13 @@ var currentAnalData = {
     INFECTED: 0,
     INFECTIOUS: 0,
     IMMUNE: 0,
-    DEAD: 0
+    DEAD: 0,
+    R: 0,
 };
 var view = VIEWS.SIMULATION;
 var stopped = false;
 var paused = false;
 var newImg, bg;
-var WIDTH;
-var HEIGHT;
 // @ts-ignore
 var personImage;
 function preload() {
@@ -33,6 +32,7 @@ function preload() {
     // bg = loadImage('pictures/Klassenzimmer.png');
 }
 function setup() {
+    alert("\nNachricht f\u00FCr Joni\n------------------\nDas ganze ist (immernoch nicht) fertig\nz.B. fehlen noch Schutzma\u00DFnahmen\nHier ist ne Liste mit den Keybindings:\nB: Blockgraph\nF: Fancygraphen\nC: Kreisdiagram\nA: Einstellungen\nP: Pausieren\n\nAu\u00DFerdem kann man f\u00FCr Informationen auf die Leute klicken :)\n    ");
     nodeSize = windowWidth / 39;
     hideSliders();
     for (var x = 0; x <= windowWidth / nodeSize; x++) {
@@ -42,6 +42,7 @@ function setup() {
         }
     }
     setupBackground();
+    initTimetables();
     //create 15 Persons and store them in a people array
     for (var i = 0; i < 24; i++) {
         people.push(new Person());
@@ -119,7 +120,9 @@ function draw() {
             INFECTED: 0,
             INFECTIOUS: 0,
             IMMUNE: 0,
-            DEAD: 0
+            DEAD: 0,
+            // @ts-ignore
+            R: parseFloat(getR())
         };
         globalNodes.forEach(function (_gN) {
             _gN.isGood = true;
@@ -134,13 +137,13 @@ function draw() {
             person.update();
             // globalNodes[Math.floor(person.position.x/nodeSize)][Math.floor(person.position.y/nodeSize)].isGood = false;
         });
-        if (currentAnalData.INFECTED + currentAnalData.INFECTIOUS == 0 && frameCount > 1) {
+        if (currentAnalData.INFECTIOUS + currentAnalData.INFECTED >= 1) {
             if (frameCount % 2 === 0)
                 analData.push(currentAnalData);
         }
         else {
             if (!stopped)
-                console.log(JSON.stringify(analData));
+                console.warn(JSON.stringify(analData));
             analData.push(currentAnalData);
             stopped = true;
         }
@@ -180,7 +183,7 @@ function renderSimulation() {
     fill(255);
     noStroke();
     text(deltaTime.toFixed() + " ms per frame", 5, 15);
-    text(people.length + " people\n" + Math.floor(windowWidth / nodeSize) + "x" + Math.floor(windowHeight / nodeSize) + " path nodes\ncurrent R: " + getR(), 5, 35);
+    text(people.length + " people\n" + Math.floor(windowWidth / nodeSize) + "x" + Math.floor(windowHeight / nodeSize) + " path nodes\ncurrent R: " + getR().toFixed(2), 5, 35);
     try {
         text(Math.floor(mouseX / nodeSize) + ", " + Math.floor(mouseY / nodeSize) + " " + globalNodes[Math.floor(mouseX / nodeSize)][Math.floor(mouseY / nodeSize)].isGood, mouseX, mouseY);
     }

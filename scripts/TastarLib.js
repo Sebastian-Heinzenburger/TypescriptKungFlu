@@ -28,12 +28,13 @@ var AStar = /** @class */ (function () {
     AStar.prototype.f = function (n) {
         return n.g + this.h(n);
     };
-    AStar.prototype.randomEndNode = function (person) {
-        person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth) / nodeSize)][Math.floor(random(windowHeight) / nodeSize)];
-        while (!person.pathFinder.endNode.isGood) {
-            person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth) / nodeSize)][Math.floor(random(windowHeight) / nodeSize)];
-        }
-    };
+    //
+    // randomEndNode(person) {
+    //   person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
+    //   while (!person.pathFinder.endNode.isGood) {
+    //     person.pathFinder.endNode = globalNodes[Math.floor(random(windowWidth)/nodeSize)][Math.floor(random(windowHeight)/nodeSize)];
+    //   }
+    // }
     AStar.prototype.expandNode = function (n, ns) {
         var _this = this;
         //get all the neighbouring nodes

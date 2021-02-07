@@ -34,17 +34,17 @@ function setupBackground() {
     obstacles = [];
     //Wände
     //Wände
-    obstacles.push(new Obstacle(1, 1, 30, 1, color(0, 0, 0), color(0, 0, 0)));
-    obstacles.push(new Obstacle(1, 1, 1, 19, color(0, 0, 0), color(0, 0, 0)));
-    obstacles.push(new Obstacle(31, 1, 1, 19, color(0, 0, 0), color(0, 0, 0)));
+    obstacles.push(new Obstacle(1, 1, 31, 1, color(0, 0, 0), color(0, 0, 0)));
+    obstacles.push(new Obstacle(1, 1, 1, 20, color(0, 0, 0), color(0, 0, 0)));
+    obstacles.push(new Obstacle(31, 1, 1, 20, color(0, 0, 0), color(0, 0, 0)));
     obstacles.push(new Obstacle(1, 20, 13, 1, color(0, 0, 0), color(0, 0, 0)));
     obstacles.push(new Obstacle(17, 20, 15, 1, color(0, 0, 0), color(0, 0, 0)));
     obstacles.push(new Obstacle(1, 11, 9, 1, color(0, 0, 0), color(0, 0, 0)));
-    obstacles.push(new Obstacle(22, 11, 9, 1, color(0, 0, 0), color(0, 0, 0)));
+    obstacles.push(new Obstacle(22, 11, 10, 1, color(0, 0, 0), color(0, 0, 0)));
     obstacles.push(new Obstacle(9, 1, 1, 9, color(0, 0, 0), color(0, 0, 0)));
     obstacles.push(new Obstacle(22, 1, 1, 9, color(0, 0, 0), color(0, 0, 0)));
-    obstacles.push(new Obstacle(9, 12, 1, 7, color(0, 0, 0), color(0, 0, 0)));
-    obstacles.push(new Obstacle(22, 12, 1, 7, color(0, 0, 0), color(0, 0, 0)));
+    obstacles.push(new Obstacle(9, 11, 1, 7, color(0, 0, 0), color(0, 0, 0)));
+    obstacles.push(new Obstacle(22, 11, 1, 7, color(0, 0, 0), color(0, 0, 0)));
     //Taffel
     obstacles.push(new Obstacle(5, 2, 2, 0.2, color(0, 153, 0), color(0, 0, 0)));
     //Tische
@@ -58,7 +58,7 @@ function setupBackground() {
     obstacles.push(new Obstacle(5, 4, 2, 1, color(110, 80, 10), color(0, 0, 0)));
     obstacles.push(new Obstacle(7, 4, 2, 1, color(110, 80, 10), color(0, 0, 0)));
     obstacles.push(new Obstacle(2, 6, 2, 1, color(110, 80, 10), color(0, 0, 0)));
-    obstacles.push(new Obstacle(4, 6, 1, 1, color(110, 80, 10), color(110, 80, 10)));
+    obstacles.push(new Obstacle(4, 6, 1, 1, color(110, 80, 10), color(0, 0, 0)));
     obstacles.push(new Obstacle(7, 6, 2, 1, color(110, 80, 10), color(0, 0, 0)));
     obstacles.push(new Obstacle(2, 8, 2, 1, color(110, 80, 10), color(0, 0, 0)));
     obstacles.push(new Obstacle(5, 8, 2, 1, color(110, 80, 10), color(0, 0, 0)));
