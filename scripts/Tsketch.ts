@@ -51,7 +51,8 @@ P: Pausieren
 Außerdem kann man für Informationen auf die Leute klicken :)
     `)
 
-    nodeSize = windowWidth/39;
+    // nodeSize = windowWidth/(39 + (windowWidth/(windowHeight/22))/39);
+    nodeSize = windowWidth > windowHeight ? windowHeight/22 : windowWidth/39;
 
     hideSliders();
 

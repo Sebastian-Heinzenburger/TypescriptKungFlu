@@ -33,7 +33,8 @@ function preload() {
 }
 function setup() {
     alert("\nNachricht f\u00FCr Joni\n------------------\nDas ganze ist (immernoch nicht) fertig\nz.B. fehlen noch Schutzma\u00DFnahmen\nHier ist ne Liste mit den Keybindings:\nB: Blockgraph\nF: Fancygraphen\nC: Kreisdiagram\nA: Einstellungen\nP: Pausieren\n\nAu\u00DFerdem kann man f\u00FCr Informationen auf die Leute klicken :)\n    ");
-    nodeSize = windowWidth / 39;
+    // nodeSize = windowWidth/(39 + (windowWidth/(windowHeight/22))/39);
+    nodeSize = windowWidth > windowHeight ? windowHeight / 22 : windowWidth / 39;
     hideSliders();
     for (var x = 0; x <= windowWidth / nodeSize; x++) {
         globalNodes.push([]);
