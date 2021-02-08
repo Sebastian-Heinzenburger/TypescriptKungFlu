@@ -28,7 +28,6 @@ function hideSliders() {
     select("#sliderD").hide();
 }
 function showSliders() {
-    console.log("shippingw");
     select("#sliderD").show();
 }
 function updateSliderValues() {
@@ -37,6 +36,9 @@ function updateSliderValues() {
     shortBreakDuration = select("#sbreakd").value();
     BreakDuration = select("#breakd").value();
     Lessonduration = select("#lessond").value();
+    homeDuration = select("#homed").value();
+    // @ts-ignore
+    stayAtHomeWhenSick = select("#stayAtHomeWhenSick").checked();
     while (people.length > select("#people").value()) {
         people.pop();
     }
@@ -46,10 +48,23 @@ function updateSliderValues() {
     // @ts-ignore
     if (select("#override").checked()) {
         people.forEach(function (person) {
-            person.virus.tLatenz = select("#latenz").value();
-            person.virus.tIncubation = select("#incubation").value();
-            person.virus.tRekonvaleszenz = select("#recon").value();
-            person.virus.rLetalitaet = select("#letalitaet").value() / 100;
+            if (person.virus) {
+                person.virus.tLatenz = select("#latenz").value();
+                person.virus.tIncubation = select("#incubation").value();
+                person.virus.tRekonvaleszenz = select("#recon").value();
+                person.virus.rLetalitaet = select("#letalitaet").value() / 100;
+                person.virus.pInfection = select("#pInfection").value() / 100;
+                person.virus.symptoms.SNEEZING = select("#sneez").value() / 1000;
+                person.virus.symptoms.COUGHING = select("#cough").value() / 1000;
+                person.virus.mutation.tLatenz = select("#mlatenz").value() / 100;
+                person.virus.mutation.tIncubation = select("#mincubation").value() / 100;
+                person.virus.mutation.tRekonvaleszenz = select("#mrecon").value() / 100;
+                person.virus.mutation.rLetalitaet = select("#mletalitaet").value() / 100;
+                person.virus.mutation.pInfection = select("#mpInfection").value() / 100;
+                person.virus.mutation.SNEEZING = select("#msneez").value() / 100;
+                person.virus.mutation.COUGHING = select("#mcough").value() / 100;
+                person.virus.mutation.SPONTANIOUS_EYE_BLEEDING = select("#meye").value() / 100;
+            }
         });
     }
 }

@@ -23,8 +23,9 @@ var currentAnalData = {
 };
 var view = VIEWS.SIMULATION;
 var stopped = false;
-var paused = false;
+var paused = true;
 var newImg, bg;
+var stayAtHomeWhenSick;
 // @ts-ignore
 var personImage;
 function preload() {
@@ -32,7 +33,20 @@ function preload() {
     // bg = loadImage('pictures/Klassenzimmer.png');
 }
 function setup() {
-    alert("\nNachricht f\u00FCr Joni\n------------------\nDas ganze ist (immernoch nicht) fertig\nz.B. fehlen noch Schutzma\u00DFnahmen\nHier ist ne Liste mit den Keybindings:\nB: Blockgraph\nF: Fancygraphen\nC: Kreisdiagram\nA: Einstellungen\nP: Pausieren\n\nAu\u00DFerdem kann man f\u00FCr Informationen auf die Leute klicken :)\n    ");
+    //     alert(`
+    // Nachricht für Joni
+    // ------------------
+    // Das ganze ist (immernoch nicht) fertig
+    // z.B. fehlen noch Schutzmaßnahmen
+    // Hier ist ne Liste mit den Keybindings:
+    // B: Blockgraph
+    // F: Fancygraphen
+    // C: Kreisdiagram
+    // A: Einstellungen
+    // P: Pausieren
+    //
+    // Außerdem kann man für Informationen auf die Leute klicken :)
+    //     `)
     // nodeSize = windowWidth/(39 + (windowWidth/(windowHeight/22))/39);
     nodeSize = windowWidth > windowHeight ? windowHeight / 22 : windowWidth / 39;
     hideSliders();
@@ -49,6 +63,26 @@ function setup() {
         people.push(new Person());
     }
     people[0].infectWith(new Virus());
+    /*
+    people[0].virus.tLatenz = <number>select("#latenz").value()
+    people[0].virus.tIncubation = <number>select("#incubation").value()
+    people[0].virus.tRekonvaleszenz = <number>select("#recon").value()
+    people[0].virus.rLetalitaet = <number>select("#letalitaet").value()/100
+    people[0].virus.pInfection = <number>select("#pInfection").value()/100
+
+    people[0].virus.symptoms.SNEEZING = <number>select("#sneez").value()/1000;
+    people[0].virus.symptoms.COUGHING = <number>select("#cough").value()/1000;
+    people[0].virus.symptoms.SPONTANIOUS_EYE_BLEEDING = <number>select("#eye").value()/1000;
+
+    people[0].virus.mutation.tLatenz = <number>select("#mlatenz").value()/100
+    people[0].virus.mutation.tIncubation = <number>select("#mincubation").value()/100
+    people[0].virus.mutation.tRekonvaleszenz = <number>select("#mrecon").value()/100
+    people[0].virus.mutation.rLetalitaet = <number>select("#mletalitaet").value()/100
+    people[0].virus.mutation.pInfection = <number>select("#mpInfection").value()/100
+    people[0].virus.mutation.SNEEZING = <number>select("#msneez").value()/100
+    people[0].virus.mutation.COUGHING = <number>select("#mcough").value()/100
+    people[0].virus.mutation.SPONTANIOUS_EYE_BLEEDING = <number>select("#meye").value()/100
+    */
     canvas = createCanvas(windowWidth, windowHeight);
     frameRate(60);
 }
@@ -93,6 +127,7 @@ function keyPressed() {
             view = view === VIEWS.CIRCLE ? VIEWS.SIMULATION : VIEWS.CIRCLE;
             break;
         case 'P':
+        case ' ':
         case 'p':
             paused = !paused;
             break;
@@ -138,17 +173,19 @@ function draw() {
             person.update();
             // globalNodes[Math.floor(person.position.x/nodeSize)][Math.floor(person.position.y/nodeSize)].isGood = false;
         });
-        if (currentAnalData.INFECTIOUS + currentAnalData.INFECTED >= 1) {
+        if (!stopped && currentAnalData.INFECTIOUS + currentAnalData.INFECTED >= 1) {
             if (frameCount % 2 === 0)
                 analData.push(currentAnalData);
         }
         else {
             if (!stopped)
                 console.warn(JSON.stringify(analData));
-            analData.push(currentAnalData);
+            // analData.push(currentAnalData)
             stopped = true;
         }
+        frameCount++;
     }
+    frameCount--;
     //draw
     switch (view) {
         case VIEWS.SIMULATION:

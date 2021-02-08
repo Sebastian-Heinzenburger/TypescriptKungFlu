@@ -21,6 +21,8 @@ class Person {
   timeTableIndex: number;
   myPersonalIndex: number;
   infectedPeople: number = 0;
+  atHome: boolean = false;
+
 
   constructor() {
     this.position = createVector(15.5*nodeSize, 21.5*nodeSize);
@@ -28,12 +30,11 @@ class Person {
     this.state = HEALTH.HEALTHY;
     this.size = nodeSize/2;
     this.localTimer = 0;
-    this.infectRadius = this.size * 1.5;
+    this.infectRadius = this.size;
     this.virus = null;
     this.pathFinder = new AStar();
     this.myPersonalIndex = people.length
     this.timeTableIndex = 0;
-    console.log(this.myPersonalIndex)
     this.pathFinder.startNode = globalNodes[Math.floor(this.position.x/nodeSize)][Math.floor(this.position.y/nodeSize)+1]
 
   }
@@ -65,30 +66,36 @@ class Person {
     }
   }
 
+  // hasSymptoms(): boolean {
+  //   if (!this.virus) return false;
+  //   return (this.localTimer < this.virus.tLatenz + ())
+  // }
+
   checkTime() {
 
     //wenn du nicht krank bist, lebe glücklich weiter
     if (this.state !== HEALTH.INFECTIOUS && this.state !== HEALTH.INFECTED) return;
 
-    //Symptome?
-    if (this.state === HEALTH.INFECTIOUS) {
-
-      //für jedes Symptom
-      for (let symptom in this.virus.symptoms) {
-        if (random(1) < this.virus.symptoms[symptom]) {
-          this.infectRadius = this.size*3;
-        }
-      }
-    }
 
     //update Timer
     this.localTimer++;
 
+    //Symptome?
+    if (this.localTimer > this.virus.tLatenz + this.virus.tIncubation) {
+
+      //für jedes Symptom
+      for (let symptom in this.virus.symptoms) {
+        if (random(1) < this.virus.symptoms[symptom]) {
+          this.infectRadius = this.size*4;
+        }
+      }
+    }
+
     //update infectRadius
-    if (this.infectRadius > this.size + 2) this.infectRadius -= 0.5;
+    if (this.infectRadius > 0) this.infectRadius -= 0.5;
 
     //Check if gonna die
-    if (round(this.virus.tRekonvaleszenz + this.virus.tIncubation) === this.localTimer) {
+    if (round(this.virus.tRekonvaleszenz + this.virus.tIncubation + this.virus.tLatenz) === this.localTimer) {
       if (random(1) < this.virus.rLetalitaet) {
         this.state = HEALTH.DEAD;
       } else {
@@ -96,27 +103,32 @@ class Person {
       }
     }
 
-    //check if its time to start sneezing
+    //check if its time to start exchanging fluids
     if (this.state === HEALTH.INFECTED) {
-      if (this.localTimer === round(this.virus.tLatenz)) {
+      if (this.localTimer > round(this.virus.tLatenz)) {
         this.state = HEALTH.INFECTIOUS;
+        this.infectRadius = this.size * 1.5;
       }
     }
 
   }
 
   handleOthers() {
-    if (this.state === HEALTH.INFECTIOUS) {
+    var _this = this;
+    if (_this.state === HEALTH.INFECTED) return;
+    if (!_this.atHome && _this.state === HEALTH.INFECTIOUS) {
       //cycle through every person...
       people.forEach(person => {
         //dont spontaneously self-infect
-        if (person !== this) {
+        if (person !== _this) {
           //if in reach
-          if (dist(person.position.x, person.position.y, this.position.x, this.position.y) < this.infectRadius) {
+          if (dist(person.position.x, person.position.y, _this.position.x, _this.position.y) < _this.infectRadius) {
             //and not dead
             if (person.state === HEALTH.HEALTHY || person.state === HEALTH.IMMUNE) {
-              person.infectWith(this.virus.get());
-              this.infectedPeople++;
+              if (random(1) < _this.virus.pInfection) {
+                person.infectWith(_this.virus.get());
+                _this.infectedPeople++;
+              }
             }
           }
         }
@@ -130,9 +142,20 @@ class Person {
     if (this.state === HEALTH.DEAD) return;
 
     //if its the first time, pick a random endnote TODO:
-    if (!this.pathFinder.endNode) {
-      this.pathFinder.endNode = this.getNextNode();
-    }
+    // if (!this.pathFinder.endNode) {
+      if (this.timeTableIndex !== 11) {
+        //if you haveee to go to schoooool again
+        this.pathFinder.endNode = this.getNextNode();
+        //and dont feel sick
+        if (this.virus){
+          if (this.localTimer < this.virus.tLatenz + this.virus.tIncubation || this.state !== HEALTH.INFECTIOUS)
+            this.atHome = false;
+        } else {
+          this.atHome = false;
+        }
+        if(!stayAtHomeWhenSick) this.atHome = false;
+      }
+    // }
 
     //refresh the startNode
     this.pathFinder.startNode = globalNodes[Math.floor(this.position.x / nodeSize)][Math.floor(this.position.y / nodeSize)];
@@ -147,9 +170,12 @@ class Person {
         && (this.position.x / nodeSize <= this.pathFinder.nextN.x + nodeSize * 0.5)
         &&
         (this.position.y / nodeSize >= this.pathFinder.nextN.y - nodeSize * 0.5)
-        && (this.position.y / nodeSize <= this.pathFinder.nextN.y + nodeSize * 0.5))
+        && (this.position.y / nodeSize <= this.pathFinder.nextN.y + nodeSize * 0.5)) ||
+        this.pathFinder.endNode !== this.pathFinder.lEndNode
         //Math.floor(this.position.y / nodeSize) == this.pathFinder.startNode.y && this.pathFinder.startNode.x + nodeSize * 0.2 <= this.position.x / nodeSize <= this.pathFinder.startNode.x - nodeSize * 0.2
     ) {
+
+      this.pathFinder.lEndNode = this.pathFinder.endNode;
 
       //berechne den Pfad
       if (this.pathFinder.getPath(globalNodes)) {
@@ -180,25 +206,43 @@ class Person {
           ((this.pathFinder.nextN.y + 0.5) * nodeSize) - this.position.y,
       );
       this.velocity.limit(this.velocity.mag())
-      this.velocity.setMag((this.velocity.mag()/100)*(deltaTime/Config.speed))
+      this.velocity.setMag((this.velocity.mag()/200)*(deltaTime/Config.speed))
       if(this.position.x + this.velocity.x > 0 && this.position.x + this.velocity.x < windowWidth &&
           this.position.y + this.velocity.y > 0 && this.position.y + this.velocity.y < windowHeight)
           this.position.add(this.velocity);
     } else {
+      if (this.timeTableIndex === 11) {
+        this.atHome = true;
+      }
       this.pathFinder.endNode = this.getNextNode();
     }
 
   }
 
   getNextNode() {
-    let _t = [Lessonduration, shortBreakDuration, Lessonduration, shortBreakDuration, Lessonduration, BreakDuration, shortBreakDuration, Lessonduration, shortBreakDuration, Lessonduration, Lessonduration, 9999]
-    let t = 0;
-    let i = 0;
-    for (i = 0; t < frameCount; i++) {
-      t += _t[i%_t.length]
+    // console.log("--------------------------")
+    let _t = [
+          Lessonduration,
+          shortBreakDuration,
+          Lessonduration,
+          shortBreakDuration,
+          Lessonduration,
+          BreakDuration,
+          shortBreakDuration,
+          Lessonduration,
+          shortBreakDuration,
+          Lessonduration,
+          Lessonduration,
+          homeDuration
+        ];
+    let tNow = 0;
+    let lessonsSince0 = 0;
+    while (tNow < frameCount) {
+      tNow+=_t[lessonsSince0%_t.length]
+      lessonsSince0++;
     }
-    this.timeTableIndex = i%_t.length
-    return timetables[this.myPersonalIndex%4][this.timeTableIndex][floor(this.myPersonalIndex/4)]
+    this.timeTableIndex = (lessonsSince0-1)%_t.length;
+    return timetables[this.myPersonalIndex%timetables.length][this.timeTableIndex][floor(this.myPersonalIndex/timetables.length)]
   }
 
   infectWith(virus) {
@@ -212,7 +256,9 @@ class Person {
 
   getInfo() {
     if (!this.virus) return `
-im healthy
+_____GENERAL_____
+- Going to ${this.pathFinder.endNode.x}|${this.pathFinder.endNode.x}
+  because it's lesson #${this.timeTableIndex} 
 `
 
     return `
@@ -223,6 +269,9 @@ ______VIRUS_______
 - Symptome:
 ${this.virus.symptoms.toString()}
 - R: ${this.infectedPeople}
+_____GENERAL_____
+- Going to ${this.pathFinder.endNode ? this.pathFinder.endNode.x : 0}|${this.pathFinder.endNode ? this.pathFinder.endNode.y : 0}
+  because it's lesson #${this.timeTableIndex} 
 `
 
   }
@@ -256,12 +305,17 @@ ${this.virus.symptoms.toString()}
   }
 
   draw() {
+    if (this.atHome) return;
+
     //get color according to health
     let c = this.getHealthColor();
     c.setAlpha(100);
-
     //draw ellipse
     fill(c);
+
+    noStroke()
+    if(this.state === HEALTH.INFECTIOUS && this.localTimer > this.virus.tLatenz + this.virus.tIncubation) stroke(255, 0, 0);
+
     ellipse(this.position.x, this.position.y, this.size*2, this.size*2)
 
     this.drawInfo(c)

@@ -8,6 +8,7 @@ let exit: PathFinderNode[]
 let shortBreakDuration = 10;
 let BreakDuration = 10;
 let Lessonduration = 10;
+let homeDuration = 10;
 
 function initTimetables() {
     tables = [
@@ -119,12 +120,12 @@ function initTimetables() {
 
 
     exit = [
-        globalNodes[14][22],
-        globalNodes[15][22],
-        globalNodes[14][22],
-        globalNodes[15][22],
-        globalNodes[14][22],
-        globalNodes[15][22],
+        globalNodes[14][21],
+        globalNodes[15][21],
+        globalNodes[14][21],
+        globalNodes[15][21],
+        globalNodes[14][21],
+        globalNodes[15][21],
     ]
 
 

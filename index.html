@@ -62,53 +62,118 @@
 <div class="canvasDiv" id="canvasD"></div>
 <div class="slidecontainer" id="sliderD" style="font-family:Arial,monospace; font-size: 16px; margin-left: 1%; color: #FFFFFF">
     <h2>General:</h2>
-    <p>
-        People:&nbsp;
-        <input type="range" min="1" max="24" value="24" class="slider" id="people">&nbsp;&nbsp;
-    </p>
-    <p>
-        Lessonduration:&nbsp;
-        <input type="range" min="10" max="180" value="90" class="slider" id="lessond">&nbsp;&nbsp;
-    </p>
-    <p>
-        Short Breakduration:&nbsp;
-        <input type="range" min="5" max="20" value="10" class="slider" id="sbreakd">&nbsp;&nbsp;
-    </p>
-    <p>
-        Breakduration:&nbsp;
-        <input type="range" min="20" max="200" value="90" class="slider" id="breakd">&nbsp;&nbsp;
-    </p>
+        <p>
+            People:&nbsp;
+            <input type="range" min="1" max="24" value="24" class="slider" id="people">&nbsp;&nbsp;
+        </p>
+
+    <h2>Timetable:</h2>
+        <p>
+            Lessonduration:&nbsp;
+            <input type="range" min="10" max="180" value="90" class="slider" id="lessond">&nbsp;&nbsp;
+        </p>
+        <p>
+            Short Breakduration:&nbsp;
+            <input type="range" min="5" max="20" value="10" class="slider" id="sbreakd">&nbsp;&nbsp;
+        </p>
+        <p>
+            Breakduration:&nbsp;
+            <input type="range" min="20" max="160" value="80" class="slider" id="breakd">&nbsp;&nbsp;
+        </p>
+        <p>
+            HomeDuration <br> (value ignored for Virus timespans, <br> real Time used instead):&nbsp;
+            <input type="range" min="20" max="1000" value="500" class="slider" id="homed">&nbsp;&nbsp;
+        </p>
+
+    <h2>Protection:</h2>
+        <p>
+            Stay At Home when sick:&nbsp;
+            <input type="checkbox" id="stayAtHomeWhenSick">
+        </p>
+
     <h2>Virus: </h2>
-    <p>
-        Override Virus Properties globally:
-        <input type="checkbox" id="override">
-    </p>
-    <p>
-        Latenzzeit:&nbsp;
-        <input type="range" min="1" max="1440" value="1" class="slider" id="latenz">&nbsp;&nbsp;
-    </p>
-    <p>
-        Inkubationszeit:&nbsp;
-        <input type="range" min="1" max="15" value="1" class="slider" id="incubation">&nbsp;&nbsp;
-    </p>
-    <p>
-        Rekonvaleszenz:&nbsp;
-        <input type="range" min="1" max="15" value="1" class="slider" id="recon">&nbsp;&nbsp;
-    </p>
-    <p>
-        Letalitätsrate:&nbsp;
-        <input type="range" min="0" max="100" value="5" class="slider" id="letalitaet">&nbsp;&nbsp;
-    </p>
+        <p>
+            Override Virus Properties globally:
+            <input type="checkbox" id="override">
+        </p>
+        <p>
+            Latency:&nbsp;
+            <input type="range" min="1" max="1440" value="1000" class="slider" id="latenz">&nbsp;&nbsp;
+        </p>
+        <p>
+            Incubation period [t + Latency]:&nbsp;
+            <input type="range" min="1" max="15" value="500" class="slider" id="incubation">&nbsp;&nbsp;
+        </p>
+        <p>
+            Convalescence period:&nbsp;
+            <input type="range" min="1" max="15" value="1" class="slider" id="recon">&nbsp;&nbsp;
+        </p>
+        <p>
+            Mortality rate:&nbsp;
+            <input type="range" min="0" max="100" value="50" class="slider" id="letalitaet">&nbsp;&nbsp;
+        </p>
+        <p>
+            Infectivity:&nbsp;
+            <input type="range" min="0" max="100" value="50" class="slider" id="pInfection">&nbsp;&nbsp;
+        </p>
+
+        <h3>Symptoms:</h3>
+            <p>
+                Sneezing:&nbsp;
+                <input type="range" min="0" max="100" value="1" class="slider" id="sneez">&nbsp;&nbsp;
+            </p>
+            <p>
+                Coughing:&nbsp;
+                <label for="cough"></label><input type="range" min="0" max="100" value="2" class="slider" id="cough">&nbsp;&nbsp;
+            </p>
+            <p>
+                Spontaneus Eye Bleeding:&nbsp;
+                <input type="range" min="0" max="100" value="1" class="slider" id="eye">&nbsp;&nbsp;
+            </p>
+        <h3>Mutation:</h3>
+            <p>
+                Latency:&nbsp;
+                <input type="range" min="0" max="200" value="0" class="slider" id="mlatenz">&nbsp;&nbsp;
+            </p>
+            <p>
+                Incubation period [t + Latency]:&nbsp;
+                <input type="range" min="0" max="200" value="50" class="slider" id="mincubation">&nbsp;&nbsp;
+            </p>
+            <p>
+                Convalescence period:&nbsp;
+                <input type="range" min="0" max="200" value="50" class="slider" id="mrecon">&nbsp;&nbsp;
+            </p>
+            <p>
+                Mortality rate:&nbsp;
+                <input type="range" min="0" max="200" value="50" class="slider" id="mletalitaet">&nbsp;&nbsp;
+            </p>
+            <p>
+                Infectivity:&nbsp;
+                <input type="range" min="0" max="200" value="50" class="slider" id="mpInfection">&nbsp;&nbsp;
+            </p>
+            <p>
+                Sneezing:&nbsp;
+                <input type="range" min="0" max="200" value="50" class="slider" id="msneez">&nbsp;&nbsp;
+            </p>
+            <p>
+                Coughing:&nbsp;
+                <input type="range" min="0" max="200" value="50" class="slider" id="mcough">&nbsp;&nbsp;
+            </p>
+            <p>
+                Spontaneus Eye Bleeding:&nbsp;
+                <input type="range" min="0" max="200" value="50" class="slider" id="meye">&nbsp;&nbsp;
+            </p>
+
 
     <h2>Config: </h2>
-    <p>
-        Speed (Computations per frame):&nbsp;
-        <input type="range" min="1" max="15" value="1" class="slider" id="speedSlider">&nbsp;&nbsp;
-    </p>
-    <p>
-        Info fadeout speed:&nbsp;
-        <input type="range" min="20" max="800" value="200" class="slider" id="fadeoutSlider">&nbsp;&nbsp;
-    </p>
+        <p>
+            Speed (Computations per frame):&nbsp;
+            <input type="range" min="1" max="15" value="1" class="slider" id="speedSlider">&nbsp;&nbsp;
+        </p>
+        <p>
+            Info fadeout speed:&nbsp;
+            <input type="range" min="20" max="800" value="200" class="slider" id="fadeoutSlider">&nbsp;&nbsp;
+        </p>
 
 
 </div>

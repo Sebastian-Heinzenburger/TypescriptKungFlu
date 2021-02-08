@@ -65,10 +65,11 @@ function setupBackground() {
 
   obstacles.push(new Obstacle(9, 1, 1, 9, color(0, 0, 0), color(0, 0, 0)))
   obstacles.push(new Obstacle(22, 1, 1, 9, color(0, 0, 0), color(0, 0, 0)))
-  obstacles.push(new Obstacle(9, 11, 1, 7, color(0, 0, 0), color(0, 0, 0)))
-  obstacles.push(new Obstacle(22, 11, 1, 7, color(0, 0, 0), color(0, 0, 0)))
+  obstacles.push(new Obstacle(9, 11, 1, 8, color(0, 0, 0), color(0, 0, 0)))
+  obstacles.push(new Obstacle(22, 11, 1, 8, color(0, 0, 0), color(0, 0, 0)))
 
 //Taffel
+  obstacles.push(new Obstacle(5, 2, 2, 0.2, color(0, 153, 0), color(0, 0, 0)))
   obstacles.push(new Obstacle(5, 2, 2, 0.2, color(0, 153, 0), color(0, 0, 0)))
 
 //Tische

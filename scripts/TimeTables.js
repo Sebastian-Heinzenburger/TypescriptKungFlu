@@ -7,6 +7,7 @@ var exit;
 var shortBreakDuration = 10;
 var BreakDuration = 10;
 var Lessonduration = 10;
+var homeDuration = 10;
 function initTimetables() {
     tables = [
         [
@@ -111,12 +112,12 @@ function initTimetables() {
         ]
     ];
     exit = [
-        globalNodes[14][22],
-        globalNodes[15][22],
-        globalNodes[14][22],
-        globalNodes[15][22],
-        globalNodes[14][22],
-        globalNodes[15][22],
+        globalNodes[14][21],
+        globalNodes[15][21],
+        globalNodes[14][21],
+        globalNodes[15][21],
+        globalNodes[14][21],
+        globalNodes[15][21],
     ];
     timetables = [
         [
