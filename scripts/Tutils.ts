@@ -67,6 +67,10 @@ function updateSliderValues() {
             if (person.virus) {
                 person.virus.tLatenz = <number>select("#latenz").value()
                 person.virus.tIncubation = <number>select("#incubation").value()
+                if (person.virus.tLatenz>person.virus.tIncubation) {
+                    person.virus.tIncubation = person.virus.tLatenz;
+                    select("#incubation").value(person.virus.tIncubation);
+                }
                 person.virus.tRekonvaleszenz = <number>select("#recon").value()
                 person.virus.rLetalitaet = <number>select("#letalitaet").value()/100
                 person.virus.pInfection = <number>select("#pInfection").value()/100
@@ -91,6 +95,10 @@ function updateSliderValues() {
     } else {
         people[0].virus.tLatenz = <number>select("#latenz").value()
         people[0].virus.tIncubation = <number>select("#incubation").value()
+        if (people[0].virus.tLatenz>people[0].virus.tIncubation) {
+            people[0].virus.tIncubation = people[0].virus.tLatenz;
+            select("#incubation").value(people[0].virus.tIncubation);
+        }
         people[0].virus.tRekonvaleszenz = <number>select("#recon").value()
         people[0].virus.rLetalitaet = <number>select("#letalitaet").value()/100
         people[0].virus.pInfection = <number>select("#pInfection").value()/100
