@@ -84,6 +84,7 @@ function setup() {
     people[0].virus.mutation.SPONTANIOUS_EYE_BLEEDING = <number>select("#meye").value()/100
     */
     canvas = createCanvas(windowWidth, windowHeight);
+    canvas.hide();
     frameRate(60);
 }
 function mousePressed(event) {
@@ -105,6 +106,8 @@ function keyPressed() {
         //just because I got used to pressing a
         case 'a':
         case 'A':
+            if (getR() < 1)
+                paused = false;
             if (canvas.style("display") == "none") {
                 hideSliders();
                 canvas.show();

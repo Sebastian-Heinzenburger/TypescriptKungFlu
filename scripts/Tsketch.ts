@@ -93,6 +93,7 @@ function setup() {
     */
 
     canvas = createCanvas(windowWidth, windowHeight);
+    canvas.hide();
     frameRate(60);
 
 }
@@ -117,6 +118,7 @@ function keyPressed() {
     //just because I got used to pressing a
     case 'a':
     case 'A':
+        if (getR() < 1) paused = false;
         if (canvas.style("display") == "none") {
             hideSliders();
             canvas.show();
