@@ -250,7 +250,6 @@ function renderSimulation() {
     text(`${people.length} people
 ${Math.floor(windowWidth/nodeSize)}x${Math.floor(windowHeight/nodeSize)} path nodes
 current R: ${getR().toFixed(2)}`,5, 35);
-    try { text(`${Math.floor(mouseX/nodeSize)}, ${Math.floor(mouseY/nodeSize)} ${globalNodes[Math.floor(mouseX/nodeSize)][Math.floor(mouseY/nodeSize)].isGood}`, mouseX, mouseY); } catch {}
     strokeWeight(1);
     stroke(255);
     fill(255);

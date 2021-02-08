@@ -101,6 +101,7 @@ class Person {
 
     //Check if gonna die
     if (round(this.virus.tRekonvaleszenz + this.virus.tIncubation + this.virus.tLatenz) <= this.localTimer) {
+      this.infectRadius = 0;
       if (random(1) < this.virus.rLetalitaet) {
         this.state = HEALTH.DEAD;
       } else {
@@ -266,7 +267,7 @@ ______VIRUS_______
 - Latenzzeit: ${(this.virus.tLatenz/60).toFixed(1)}h
 - Incubationszeit:${(this.virus.tIncubation/60).toFixed(1)}h
 - Rekonvaleszenzzeit:${(this.virus.tRekonvaleszenz/60).toFixed(1)}h
-- Infectivity:${this.virus.pInfection}%
+- Infectivity:${(this.virus.pInfection * 100).toFixed(1)}%
 - Symptome:
 ${this.virus.symptoms.toString()}
 - R: ${this.infectedPeople}

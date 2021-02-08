@@ -73,6 +73,7 @@ var Person = /** @class */ (function () {
             this.infectRadius -= 0.5;
         //Check if gonna die
         if (round(this.virus.tRekonvaleszenz + this.virus.tIncubation + this.virus.tLatenz) <= this.localTimer) {
+            this.infectRadius = 0;
             if (random(1) < this.virus.rLetalitaet) {
                 this.state = HEALTH.DEAD;
             }
@@ -213,7 +214,7 @@ var Person = /** @class */ (function () {
     Person.prototype.getInfo = function () {
         if (!this.virus)
             return "\n_____GENERAL_____\n- Going to " + this.pathFinder.endNode.x + "|" + this.pathFinder.endNode.x + "\n  because it's lesson #" + this.timeTableIndex + " \n";
-        return "\n______VIRUS_______\n- Latenzzeit: " + (this.virus.tLatenz / 60).toFixed(1) + "h\n- Incubationszeit:" + (this.virus.tIncubation / 60).toFixed(1) + "h\n- Rekonvaleszenzzeit:" + (this.virus.tRekonvaleszenz / 60).toFixed(1) + "h\n- Infectivity:" + this.virus.pInfection + "%\n- Symptome:\n" + this.virus.symptoms.toString() + "\n- R: " + this.infectedPeople + "\n_____GENERAL_____\n- Going to " + (this.pathFinder.endNode ? this.pathFinder.endNode.x : 0) + "|" + (this.pathFinder.endNode ? this.pathFinder.endNode.y : 0) + "\n  because it's lesson #" + this.timeTableIndex + " \n";
+        return "\n______VIRUS_______\n- Latenzzeit: " + (this.virus.tLatenz / 60).toFixed(1) + "h\n- Incubationszeit:" + (this.virus.tIncubation / 60).toFixed(1) + "h\n- Rekonvaleszenzzeit:" + (this.virus.tRekonvaleszenz / 60).toFixed(1) + "h\n- Infectivity:" + (this.virus.pInfection * 100).toFixed(1) + "%\n- Symptome:\n" + this.virus.symptoms.toString() + "\n- R: " + this.infectedPeople + "\n_____GENERAL_____\n- Going to " + (this.pathFinder.endNode ? this.pathFinder.endNode.x : 0) + "|" + (this.pathFinder.endNode ? this.pathFinder.endNode.y : 0) + "\n  because it's lesson #" + this.timeTableIndex + " \n";
     };
     Person.prototype.drawInfo = function (c) {
         var _m = createVector(mouseX - this.position.x, mouseY - this.position.y);

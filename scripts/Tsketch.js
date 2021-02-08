@@ -233,10 +233,6 @@ function renderSimulation() {
     noStroke();
     text(deltaTime.toFixed() + " ms per frame", 5, 15);
     text(people.length + " people\n" + Math.floor(windowWidth / nodeSize) + "x" + Math.floor(windowHeight / nodeSize) + " path nodes\ncurrent R: " + getR().toFixed(2), 5, 35);
-    try {
-        text(Math.floor(mouseX / nodeSize) + ", " + Math.floor(mouseY / nodeSize) + " " + globalNodes[Math.floor(mouseX / nodeSize)][Math.floor(mouseY / nodeSize)].isGood, mouseX, mouseY);
-    }
-    catch (_a) { }
     strokeWeight(1);
     stroke(255);
     fill(255);
