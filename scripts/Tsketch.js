@@ -49,7 +49,7 @@ function setup() {
     //     `)
     // nodeSize = windowWidth/(39 + (windowWidth/(windowHeight/22))/39);
     nodeSize = windowWidth > windowHeight ? windowHeight / 22 : windowWidth / 39;
-    hideSliders();
+    showSliders();
     for (var x = 0; x <= windowWidth / nodeSize; x++) {
         globalNodes.push([]);
         for (var y = 0; y < windowHeight / nodeSize; y++) {

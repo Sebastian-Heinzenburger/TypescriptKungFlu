@@ -55,7 +55,7 @@ function setup() {
     // nodeSize = windowWidth/(39 + (windowWidth/(windowHeight/22))/39);
     nodeSize = windowWidth > windowHeight ? windowHeight/22 : windowWidth/39;
 
-    hideSliders();
+    showSliders();
 
 
     for (let x = 0; x <= windowWidth/nodeSize; x++) {
