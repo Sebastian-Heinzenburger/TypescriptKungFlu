@@ -3,7 +3,7 @@ var Virus = /** @class */ (function () {
     function Virus() {
         this.rLetalitaet = 0.5;
         this.tRekonvaleszenz = 700;
-        this.tIncubation = 500;
+        this.tIncubation = 99999999;
         this.tLatenz = 500;
         this.pInfection = 0.5;
         this.mutation = { rLetalitaet: 0.5, pInfection: 0.5, tRekonvaleszenz: 0.5, tIncubation: 0.5, tLatenz: 0.5, SNEEZING: 0.5, COUGHING: 0.5, SPONTANIOUS_EYE_BLEEDING: 0.5 };

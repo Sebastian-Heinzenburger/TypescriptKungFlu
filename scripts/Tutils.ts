@@ -4,6 +4,7 @@ enum HEALTH {
     HEALTHY,
     INFECTED,
     INFECTIOUS,
+    SYMPTOMS,
     IMMUNE,
     DEAD
 }
@@ -44,6 +45,11 @@ function updateSliderValues() {
     Lessonduration = <number>select("#lessond").value();
     homeDuration = <number>select("#homed").value();
 
+    // @ts-ignore
+    mask = <boolean>select("#mask").checked();
+    // @ts-ignore
+    ffp2 = <boolean>select("#ffp2").checked();
+    maskProtection = mask ? maskProtection = <number>select("#maskprotection").value()/100 : 0;
 
     // @ts-ignore
     stayAtHomeWhenSick = <boolean>select("#stayAtHomeWhenSick").checked();
@@ -81,12 +87,25 @@ function updateSliderValues() {
 
 
 
-
-
-
-
-
         });
+    } else {
+        people[0].virus.tLatenz = <number>select("#latenz").value()
+        people[0].virus.tIncubation = <number>select("#incubation").value()
+        people[0].virus.tRekonvaleszenz = <number>select("#recon").value()
+        people[0].virus.rLetalitaet = <number>select("#letalitaet").value()/100
+        people[0].virus.pInfection = <number>select("#pInfection").value()/100
+        people[0].virus.symptoms.SNEEZING = <number>select("#sneez").value()/1000;
+        people[0].virus.symptoms.COUGHING = <number>select("#cough").value()/1000;
+
+        people[0].virus.mutation.tLatenz = <number>select("#mlatenz").value()/100
+        people[0].virus.mutation.tIncubation = <number>select("#mincubation").value()/100
+        people[0].virus.mutation.tRekonvaleszenz = <number>select("#mrecon").value()/100
+        people[0].virus.mutation.rLetalitaet = <number>select("#mletalitaet").value()/100
+        people[0].virus.mutation.pInfection = <number>select("#mpInfection").value()/100
+        people[0].virus.mutation.SNEEZING = <number>select("#msneez").value()/100
+        people[0].virus.mutation.COUGHING = <number>select("#mcough").value()/100
+        people[0].virus.mutation.SPONTANIOUS_EYE_BLEEDING = <number>select("#meye").value()/100
+
     }
 }
 

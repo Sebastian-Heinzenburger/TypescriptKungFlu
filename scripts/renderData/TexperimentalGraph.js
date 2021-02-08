@@ -10,6 +10,8 @@ function renderFancy() {
     drawCurve("INFECTED");
     stroke(0, 255, 0);
     drawCurve("INFECTIOUS");
+    stroke(180, 20, 20);
+    drawCurve("SYMPTOMS");
     stroke(255, 255, 0);
     drawCurve("IMMUNE");
     stroke(10, 10, 10);
@@ -28,6 +30,8 @@ function renderFancy2() {
     drawLines("INFECTED");
     stroke(0, 255, 0);
     drawLines("INFECTIOUS");
+    stroke(180, 20, 20);
+    drawLines("SYMPTOMS");
     stroke(255, 255, 0);
     drawLines("IMMUNE");
     stroke(10, 10, 10);

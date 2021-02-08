@@ -36,6 +36,9 @@ var Person = /** @class */ (function () {
             case HEALTH.INFECTIOUS:
                 currentAnalData.INFECTIOUS++;
                 break;
+            case HEALTH.SYMPTOMS:
+                currentAnalData.SYMPTOMS++;
+                break;
             case HEALTH.IMMUNE:
                 currentAnalData.IMMUNE++;
                 break;
@@ -50,24 +53,26 @@ var Person = /** @class */ (function () {
     // }
     Person.prototype.checkTime = function () {
         //wenn du nicht krank bist, lebe glücklich weiter
-        if (this.state !== HEALTH.INFECTIOUS && this.state !== HEALTH.INFECTED)
+        if (this.state !== HEALTH.INFECTIOUS && this.state !== HEALTH.INFECTED && this.state !== HEALTH.SYMPTOMS)
             return;
         //update Timer
         this.localTimer++;
+        if (this.virus.tIncubation < this.localTimer)
+            this.state = HEALTH.SYMPTOMS;
         //Symptome?
-        if (this.localTimer > this.virus.tLatenz + this.virus.tIncubation) {
+        if (this.state === HEALTH.SYMPTOMS) {
             //für jedes Symptom
             for (var symptom in this.virus.symptoms) {
-                if (random(1) < this.virus.symptoms[symptom]) {
+                if (!mask && random(1) < this.virus.symptoms[symptom]) {
                     this.infectRadius = this.size * 4;
                 }
             }
         }
         //update infectRadius
-        if (this.infectRadius > 0)
+        if (this.infectRadius > this.size * 1.5)
             this.infectRadius -= 0.5;
         //Check if gonna die
-        if (round(this.virus.tRekonvaleszenz + this.virus.tIncubation + this.virus.tLatenz) === this.localTimer) {
+        if (round(this.virus.tRekonvaleszenz + this.virus.tIncubation + this.virus.tLatenz) <= this.localTimer) {
             if (random(1) < this.virus.rLetalitaet) {
                 this.state = HEALTH.DEAD;
             }
@@ -75,7 +80,7 @@ var Person = /** @class */ (function () {
                 this.state = HEALTH.IMMUNE;
             }
         }
-        //check if its time to start exchanging fluids
+        //check if Latenzzeit is over
         if (this.state === HEALTH.INFECTED) {
             if (this.localTimer > round(this.virus.tLatenz)) {
                 this.state = HEALTH.INFECTIOUS;
@@ -87,7 +92,7 @@ var Person = /** @class */ (function () {
         var _this = this;
         if (_this.state === HEALTH.INFECTED)
             return;
-        if (!_this.atHome && _this.state === HEALTH.INFECTIOUS) {
+        if (!_this.atHome && (_this.state === HEALTH.INFECTIOUS || this.state === HEALTH.SYMPTOMS)) {
             //cycle through every person...
             people.forEach(function (person) {
                 //dont spontaneously self-infect
@@ -96,7 +101,7 @@ var Person = /** @class */ (function () {
                     if (dist(person.position.x, person.position.y, _this.position.x, _this.position.y) < _this.infectRadius) {
                         //and not dead
                         if (person.state === HEALTH.HEALTHY || person.state === HEALTH.IMMUNE) {
-                            if (random(1) < _this.virus.pInfection) {
+                            if (random(1) < _this.virus.pInfection * (1 - maskProtection) * (ffp2 ? (1 - maskProtection) : 1)) {
                                 person.infectWith(_this.virus.get());
                                 _this.infectedPeople++;
                             }
@@ -116,13 +121,7 @@ var Person = /** @class */ (function () {
             //if you haveee to go to schoooool again
             this.pathFinder.endNode = this.getNextNode();
             //and dont feel sick
-            if (this.virus) {
-                if (this.localTimer < this.virus.tLatenz + this.virus.tIncubation || this.state !== HEALTH.INFECTIOUS)
-                    this.atHome = false;
-            }
-            else {
-                this.atHome = false;
-            }
+            this.atHome = (this.state === HEALTH.SYMPTOMS);
             if (!stayAtHomeWhenSick)
                 this.atHome = false;
         }
@@ -214,7 +213,7 @@ var Person = /** @class */ (function () {
     Person.prototype.getInfo = function () {
         if (!this.virus)
             return "\n_____GENERAL_____\n- Going to " + this.pathFinder.endNode.x + "|" + this.pathFinder.endNode.x + "\n  because it's lesson #" + this.timeTableIndex + " \n";
-        return "\n______VIRUS_______\n- Latenzzeit: " + (this.virus.tLatenz / 60).toFixed(1) + "h\n- Incubationszeit:" + (this.virus.tIncubation / 60).toFixed(1) + "h\n- Rekonvaleszenzzeit:" + (this.virus.tRekonvaleszenz / 60).toFixed(1) + "h\n- Symptome:\n" + this.virus.symptoms.toString() + "\n- R: " + this.infectedPeople + "\n_____GENERAL_____\n- Going to " + (this.pathFinder.endNode ? this.pathFinder.endNode.x : 0) + "|" + (this.pathFinder.endNode ? this.pathFinder.endNode.y : 0) + "\n  because it's lesson #" + this.timeTableIndex + " \n";
+        return "\n______VIRUS_______\n- Latenzzeit: " + (this.virus.tLatenz / 60).toFixed(1) + "h\n- Incubationszeit:" + (this.virus.tIncubation / 60).toFixed(1) + "h\n- Rekonvaleszenzzeit:" + (this.virus.tRekonvaleszenz / 60).toFixed(1) + "h\n- Infectivity:" + this.virus.pInfection + "%\n- Symptome:\n" + this.virus.symptoms.toString() + "\n- R: " + this.infectedPeople + "\n_____GENERAL_____\n- Going to " + (this.pathFinder.endNode ? this.pathFinder.endNode.x : 0) + "|" + (this.pathFinder.endNode ? this.pathFinder.endNode.y : 0) + "\n  because it's lesson #" + this.timeTableIndex + " \n";
     };
     Person.prototype.drawInfo = function (c) {
         var _m = createVector(mouseX - this.position.x, mouseY - this.position.y);
@@ -248,19 +247,14 @@ var Person = /** @class */ (function () {
         c.setAlpha(100);
         //draw ellipse
         fill(c);
-        noStroke();
-        if (this.state === HEALTH.INFECTIOUS && this.localTimer > this.virus.tLatenz + this.virus.tIncubation)
-            stroke(255, 0, 0);
         ellipse(this.position.x, this.position.y, this.size * 2, this.size * 2);
         this.drawInfo(c);
         //if not dead
         // if (!(this.state == HEALTH.DEAD || this.state == HEALTH.IMMUNE)) {
-        if (this.state === HEALTH.INFECTIOUS) {
-            //draw infect radius
-            c.setAlpha(90);
-            fill(c);
-            ellipse(this.position.x, this.position.y, this.infectRadius, this.infectRadius);
-        }
+        //draw infect radius
+        c.setAlpha(90);
+        fill(c);
+        ellipse(this.position.x, this.position.y, this.infectRadius, this.infectRadius);
         //draw image
         noFill();
         image(personImage, this.position.x - this.size * 0.5, this.position.y - this.size * 0.5, this.size, this.size);
@@ -280,6 +274,8 @@ var Person = /** @class */ (function () {
                 return color(20, 100, 20); //dark green
             case HEALTH.INFECTIOUS:
                 return color(0, 255, 0); //green
+            case HEALTH.SYMPTOMS:
+                return color(180, 20, 20); // red
             case HEALTH.DEAD:
                 return color(10, 10, 10); //black
         }

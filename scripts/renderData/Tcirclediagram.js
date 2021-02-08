@@ -24,6 +24,11 @@ function renderCircle() {
     currentDeg.next = currentDeg.last + (currentAnalData.INFECTIOUS / people.length) * 360;
     arc(windowWidth / 2, windowHeight / 2, size, size, radians(currentDeg.last), radians(currentDeg.next));
     currentDeg.last = currentDeg.next;
+    //draw the symptoms
+    fill(180, 20, 20); // in dark green
+    currentDeg.next = currentDeg.last + (currentAnalData.SYMPTOMS / people.length) * 360;
+    arc(windowWidth / 2, windowHeight / 2, size, size, radians(currentDeg.last), radians(currentDeg.next));
+    currentDeg.last = currentDeg.next;
     //draw the immune
     fill(255, 255, 0); //in yellow
     currentDeg.next = currentDeg.last + (currentAnalData.IMMUNE / people.length) * 360;

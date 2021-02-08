@@ -23,8 +23,8 @@
 
 <style media="screen">
     .slider {
-        -webkit-appearance: none;  /* Override default CSS styles */
-        appearance: none;
+        /*-webkit-appearance: none; */
+        /*appearance: none;*/
         width: 70%; /* Full-width */
         height: 10px; /* Specified height */
         background: #000000; /* Grey background */
@@ -47,6 +47,7 @@
         width: 15px; /* Set a specific slider handle width */
         height: 15px; /* Slider handle height */
         background: #FFFFFF; /* Green background */
+
     ; /* Green background */
     }
 
@@ -55,6 +56,13 @@
         height: 15px; /* Slider handle height */
         background: #FFFFFF; /* Green background */
     ; /* Green background */
+    }
+
+    .checkbox {
+        float: right;
+        margin-right: 70%;
+        width: 16px;
+        height: 16px;
     }
 </style>
 
@@ -94,21 +102,34 @@
     <h2>Protection:</h2>
         <p>
             Stay At Home when sick:&nbsp;
-            <input type="checkbox" id="stayAtHomeWhenSick">
+            <input type="checkbox" class="checkbox" id="stayAtHomeWhenSick">
         </p>
+        <p>
+            Wear a mask:
+            <input type="checkbox" class="checkbox" id="mask">
+        </p>
+            <p>
+            FFP2:
+            <input type="checkbox" class="checkbox" id="ffp2">
+        </p>
+        <p>
+            Maskprotection:&nbsp;
+            <input type="range" min="1" max="100" value="100" class="slider" id="maskprotection">&nbsp;&nbsp;
+        </p>
+
 
     <h2>Virus: </h2>
         <p>
             Override Virus Properties globally:
-            <input type="checkbox" id="override">
+            <input type="checkbox" class="checkbox" id="override">
         </p>
         <p>
             Latency:&nbsp;
-            <input type="range" min="1" max="1440" value="1000" class="slider" id="latenz">&nbsp;&nbsp;
+            <input type="range" min="1" max="1440" value="500" class="slider" id="latenz">&nbsp;&nbsp;
         </p>
         <p>
             Incubation period [t + Latency]:&nbsp;
-            <input type="range" min="1" max="15" value="500" class="slider" id="incubation">&nbsp;&nbsp;
+            <input type="range" min="1" max="1440" value="1000" class="slider" id="incubation">&nbsp;&nbsp;
         </p>
         <p>
             Convalescence period:&nbsp;

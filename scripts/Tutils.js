@@ -5,8 +5,9 @@ var HEALTH;
     HEALTH[HEALTH["HEALTHY"] = 0] = "HEALTHY";
     HEALTH[HEALTH["INFECTED"] = 1] = "INFECTED";
     HEALTH[HEALTH["INFECTIOUS"] = 2] = "INFECTIOUS";
-    HEALTH[HEALTH["IMMUNE"] = 3] = "IMMUNE";
-    HEALTH[HEALTH["DEAD"] = 4] = "DEAD";
+    HEALTH[HEALTH["SYMPTOMS"] = 3] = "SYMPTOMS";
+    HEALTH[HEALTH["IMMUNE"] = 4] = "IMMUNE";
+    HEALTH[HEALTH["DEAD"] = 5] = "DEAD";
 })(HEALTH || (HEALTH = {}));
 // let Tables = [
 //
@@ -38,6 +39,11 @@ function updateSliderValues() {
     Lessonduration = select("#lessond").value();
     homeDuration = select("#homed").value();
     // @ts-ignore
+    mask = select("#mask").checked();
+    // @ts-ignore
+    ffp2 = select("#ffp2").checked();
+    maskProtection = mask ? maskProtection = select("#maskprotection").value() / 100 : 0;
+    // @ts-ignore
     stayAtHomeWhenSick = select("#stayAtHomeWhenSick").checked();
     while (people.length > select("#people").value()) {
         people.pop();
@@ -66,6 +72,23 @@ function updateSliderValues() {
                 person.virus.mutation.SPONTANIOUS_EYE_BLEEDING = select("#meye").value() / 100;
             }
         });
+    }
+    else {
+        people[0].virus.tLatenz = select("#latenz").value();
+        people[0].virus.tIncubation = select("#incubation").value();
+        people[0].virus.tRekonvaleszenz = select("#recon").value();
+        people[0].virus.rLetalitaet = select("#letalitaet").value() / 100;
+        people[0].virus.pInfection = select("#pInfection").value() / 100;
+        people[0].virus.symptoms.SNEEZING = select("#sneez").value() / 1000;
+        people[0].virus.symptoms.COUGHING = select("#cough").value() / 1000;
+        people[0].virus.mutation.tLatenz = select("#mlatenz").value() / 100;
+        people[0].virus.mutation.tIncubation = select("#mincubation").value() / 100;
+        people[0].virus.mutation.tRekonvaleszenz = select("#mrecon").value() / 100;
+        people[0].virus.mutation.rLetalitaet = select("#mletalitaet").value() / 100;
+        people[0].virus.mutation.pInfection = select("#mpInfection").value() / 100;
+        people[0].virus.mutation.SNEEZING = select("#msneez").value() / 100;
+        people[0].virus.mutation.COUGHING = select("#mcough").value() / 100;
+        people[0].virus.mutation.SPONTANIOUS_EYE_BLEEDING = select("#meye").value() / 100;
     }
 }
 Object.freeze(HEALTH);

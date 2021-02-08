@@ -17,6 +17,7 @@ var currentAnalData = {
     HEALTHY: 0,
     INFECTED: 0,
     INFECTIOUS: 0,
+    SYMPTOMS: 0,
     IMMUNE: 0,
     DEAD: 0,
     R: 0,
@@ -28,10 +29,14 @@ var newImg, bg;
 var stayAtHomeWhenSick;
 // @ts-ignore
 var personImage;
+var mask;
+var ffp2;
+var maskProtection;
 function preload() {
     personImage = loadImage('pictures/person.jpg');
     // bg = loadImage('pictures/Klassenzimmer.png');
 }
+0;
 function setup() {
     //     alert(`
     // Nachricht für Joni
@@ -56,6 +61,9 @@ function setup() {
             globalNodes[x][y] = new PathFinderNode(x, y);
         }
     }
+    canvas = createCanvas(windowWidth, windowHeight);
+    canvas.hide();
+    frameRate(60);
     setupBackground();
     initTimetables();
     //create 15 Persons and store them in a people array
@@ -83,9 +91,6 @@ function setup() {
     people[0].virus.mutation.COUGHING = <number>select("#mcough").value()/100
     people[0].virus.mutation.SPONTANIOUS_EYE_BLEEDING = <number>select("#meye").value()/100
     */
-    canvas = createCanvas(windowWidth, windowHeight);
-    canvas.hide();
-    frameRate(60);
 }
 function mousePressed(event) {
     if (canvas.style("display") == "none")
@@ -97,8 +102,10 @@ function mousePressed(event) {
             //if so, then sneeze in his face!
             // person.infectWith(new Virus());
             person.showInfo = Config.fadeTime;
+            person.drawInfo(person.getHealthColor());
         }
     });
+    redraw();
     return true;
 }
 function keyPressed() {
@@ -158,6 +165,7 @@ function draw() {
             HEALTHY: 0,
             INFECTED: 0,
             INFECTIOUS: 0,
+            SYMPTOMS: 0,
             IMMUNE: 0,
             DEAD: 0,
             // @ts-ignore
@@ -176,7 +184,7 @@ function draw() {
             person.update();
             // globalNodes[Math.floor(person.position.x/nodeSize)][Math.floor(person.position.y/nodeSize)].isGood = false;
         });
-        if (!stopped && currentAnalData.INFECTIOUS + currentAnalData.INFECTED >= 1) {
+        if (!stopped && currentAnalData.INFECTIOUS + currentAnalData.SYMPTOMS + currentAnalData.INFECTED >= 1) {
             if (frameCount % 2 === 0)
                 analData.push(currentAnalData);
         }
