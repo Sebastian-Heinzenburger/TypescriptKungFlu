@@ -258,7 +258,7 @@ var Person = /** @class */ (function () {
         ellipse(this.position.x, this.position.y, this.infectRadius, this.infectRadius);
         //draw image
         noFill();
-        image(personImage, this.position.x - this.size * 0.5, this.position.y - this.size * 0.5, this.size, this.size);
+        image(personImage, this.position.x - ((this.size / personImage.height) * personImage.width) * 0.75, this.position.y - this.size * 0.75, ((this.size / personImage.height) * personImage.width) * 1.5, this.size * 1.5);
         //debug text
         // simulationGraphics.fill(255);
         // simulationGraphics.text(this.state, this.position.x+20, this.position.y);
